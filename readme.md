@@ -47,8 +47,3 @@ Na pasta `back-end`, inicie o servidor com:
 ```bash
 npm run dev
 ```
-
-```
-
-Quer que eu já adicione também uma seção de **pré-requisitos** (Node.js, NPM, PostgreSQL e Prisma) no início, pra ficar ainda mais profissional?
-```
