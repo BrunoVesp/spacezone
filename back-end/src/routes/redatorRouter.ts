@@ -5,7 +5,7 @@ import { authMiddleware } from "../middleware/webtoken";
 const router = Router();
 
 // Redatores
-router.post("/redatores", RedatorController.createRedator);
+router.post("/redatores/:id", RedatorController.createRedator);
 router.get("/redatores", RedatorController.getAllRedatores);
 router.get("/redatores/:id", RedatorController.getRedatorById);
 router.delete("/redatores/:id", authMiddleware, RedatorController.demoteRedator);

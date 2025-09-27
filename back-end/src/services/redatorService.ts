@@ -1,19 +1,12 @@
 import prisma from "../db/prisma";
 import { Redator, Post } from "../generated/prisma";
 
-interface CreateRedatorDTO {
-  userId: number;
-  isAdm: boolean;
-}
-
-interface DeleteRedator {
-  id: number;
-}
 
 const RedatorService = {
-  async createRedator(data: CreateRedatorDTO): Promise<Redator> {
+  async createRedator(id: number): Promise<Redator> {
     return prisma.redator.create({
-      data
+      data: { userId: id, isAdm: true },
+      include: { user: true, posts: true }
     });
   },
 
@@ -35,9 +28,8 @@ const RedatorService = {
   },
 
   async deleteRedator(id: number): Promise<Redator> {
-    return prisma.redator.update({
-      where: { id },
-      data: { isAdm: false }
+    return prisma.redator.delete({
+      where: { userId: id }
     });
   },
 

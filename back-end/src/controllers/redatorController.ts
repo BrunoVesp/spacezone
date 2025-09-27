@@ -3,9 +3,13 @@ import RedatorService from '../services/redatorService';
 
 const RedatorController = {
   async createRedator(req: Request, res: Response): Promise<void> {
-    const { userId, isAdm } = req.body;
+    const userId = Number(req.params.id);
+    if (isNaN(userId)) {
+      res.status(400).json({ error: "ID inválido" });
+      return;
+    }
     try {
-      const redator = await RedatorService.createRedator({ userId, isAdm });
+      const redator = await RedatorService.createRedator(userId);
       res.status(201).json(redator);
     } catch (error) {
       res.status(400).json({ error: (error as Error).message });
