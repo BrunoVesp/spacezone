@@ -8,6 +8,12 @@ const RedatorController = {
       res.status(400).json({ error: "ID inválido" });
       return;
     }
+
+    if (!req || req.user.id !== userId) {
+      res.status(403).json({ message: 'Acesso negado' });
+      return;
+    }
+
     try {
       const redator = await RedatorService.createRedator(userId);
       res.status(201).json(redator);
@@ -27,6 +33,12 @@ const RedatorController = {
       res.status(400).json({ error: "ID inválido" });
       return;
     }
+
+    if (!req || req.user.id !== id) {
+      res.status(403).json({ message: 'Acesso negado' });
+      return;
+    }
+
     const redator = await RedatorService.getRedatorById(id);
     if (!redator) {
       res.status(404).json({ error: "Redator não encontrado" });
@@ -37,6 +49,12 @@ const RedatorController = {
 
   async demoteRedator(req: Request, res: Response): Promise<void> {
     const id = Number(req.params.id);
+
+    if (!req || req.user.id !== id) {
+      res.status(403).json({ message: 'Acesso negado' });
+      return;
+    }
+
     try {
       const demote = await RedatorService.deleteRedator(id);
       res.status(200).json({ message: "Redator Rebaixado" });

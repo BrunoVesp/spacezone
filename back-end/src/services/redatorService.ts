@@ -1,7 +1,6 @@
 import prisma from "../db/prisma";
 import { Redator, Post } from "../generated/prisma";
 
-
 const RedatorService = {
   async createRedator(id: number): Promise<Redator> {
     return prisma.redator.create({

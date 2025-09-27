@@ -5,10 +5,10 @@ import { authMiddleware } from "../middleware/webtoken";
 const router = Router();
 
 // Redatores
-router.post("/redatores/:id", RedatorController.createRedator);
+router.post("/redatores/promote/:id", authMiddleware, RedatorController.createRedator);
 router.get("/redatores", RedatorController.getAllRedatores);
 router.get("/redatores/:id", RedatorController.getRedatorById);
-router.delete("/redatores/:id", authMiddleware, RedatorController.demoteRedator);
+router.delete("/redatores/demote/:id", authMiddleware, RedatorController.demoteRedator);
 
 // Posts
 router.post("/redatores/:id/posts", authMiddleware, RedatorController.createPost);
