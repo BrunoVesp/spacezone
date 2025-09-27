@@ -6,8 +6,8 @@ interface CreateRedatorDTO {
   isAdm: boolean;
 }
 
-interface UpdateRedatorDTO {
-  isAdm?: boolean;
+interface DeleteRedator {
+  id: number;
 }
 
 const RedatorService = {
@@ -22,7 +22,8 @@ const RedatorService = {
       include: {
         user: true,
         posts: true
-      }
+      },
+      where: { isAdm: true }
     });
   },
 
@@ -33,16 +34,10 @@ const RedatorService = {
     });
   },
 
-  async updateRedator(id: number, data: UpdateRedatorDTO): Promise<Redator> {
+  async deleteRedator(id: number): Promise<Redator> {
     return prisma.redator.update({
       where: { id },
-      data
-    });
-  },
-
-  async deleteRedator(id: number): Promise<Redator> {
-    return prisma.redator.delete({
-      where: { id }
+      data: { isAdm: false }
     });
   },
 

@@ -7,6 +7,8 @@ const router = Router();
 // Redatores
 router.post("/redatores", RedatorController.createRedator);
 router.get("/redatores", RedatorController.getAllRedatores);
+router.get("/redatores/:id", RedatorController.getRedatorById);
+router.delete("/redatores/:id", authMiddleware, RedatorController.demoteRedator);
 
 // Posts
 router.post("/redatores/:id/posts", authMiddleware, RedatorController.createPost);

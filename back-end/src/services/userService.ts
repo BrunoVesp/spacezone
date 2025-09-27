@@ -1,4 +1,3 @@
-import { Token } from "typescript";
 import prisma from "../db/prisma";
 import { User } from "../generated/prisma";
 import bcrypt from "bcrypt";
