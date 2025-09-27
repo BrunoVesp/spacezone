@@ -1,5 +1,5 @@
 import {Request, Response} from 'express';
-import UserService from '../services/userServices';
+import UserService from '../services/userService';
 import { User } from '../generated/prisma';
 import bcrypt from 'bcrypt';
 
