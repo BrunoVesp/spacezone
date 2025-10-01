@@ -5,6 +5,7 @@ import { postCreateSchema, postUpdateSchema } from "../schemas/postSchema";
 import { ZodError } from "zod";
 import { PostDataCreateType } from "../types/postDataCreate";
 import { idSchema } from "../schemas/idSchema";
+import prisma from "../db/prisma";
 
 const PostsController = {
     async getAllPosts(req: Request, res: Response): Promise<void> {
@@ -46,13 +47,19 @@ const PostsController = {
     async createPost(req: Request, res: Response): Promise<void> {
         try {
             const data = postCreateSchema.parse(req.body);
-            const userId = req.user.id;
+            const id: number = req.user.id;
 
-            if (!userId) {
+            if (!id) {
                 res.status(401).json({ error: "Usuário não autenticado." });
                 return;
             }
-            const newPost: PostDataCreateType = await PostsService.createPost(userId, data);
+
+            const redator = await prisma.user.findUnique({ where: { id: req.user.id } });
+            if (!redator?.isRedator) {
+                throw new Error("Somente redatores podem publicar posts.");
+            }
+
+            const newPost: PostDataCreateType = await PostsService.createPost(id, data);
 
             res.status(201).json(newPost);
         } catch (error: any) {
@@ -77,10 +84,15 @@ const PostsController = {
             });
             return;
         }
-        const userId = req.user.id;
+
         try {
+            const redator = await prisma.user.findUnique({ where: { id: req.user.id } });
+            if (!redator?.isRedator) {
+                throw new Error("Somente redatores podem atualizar posts.");
+            }
+
             const data = postUpdateSchema.parse(req.body);
-            const updatedPost = await PostsService.updatePost(id, data, userId);
+            const updatedPost = await PostsService.updatePost(id, data);
             res.status(200).json(updatedPost);
         } catch (error: any) {
             if (error instanceof ZodError) {
@@ -104,9 +116,12 @@ const PostsController = {
             });
             return;
         }
-        const userId = req.user.id;
         try {
-            const deletedPost = await PostsService.deletePost(id, userId);
+            const redator = await prisma.user.findUnique({ where: { id: req.user.id } });
+            if (!redator?.isRedator) {
+                throw new Error("Somente redatores podem deletar posts.");
+            }
+            const deletedPost = await PostsService.deletePost(id);
             res.status(204).json(deletedPost);
         } catch (error: any) {
             res.status(400).json({ message: error.message || "Erro ao deletar post" });

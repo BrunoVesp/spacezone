@@ -1,59 +1,30 @@
 import prisma from "../db/prisma";
-import { Redator, Post } from "../generated/prisma";
+import { Post, User } from "../generated/prisma";
 
 const RedatorService = {
-  async createRedator(id: number): Promise<Redator> {
-    return prisma.redator.create({
-      data: { userId: id, isAdm: true },
-      include: { user: true, posts: true }
-    });
-  },
-
-  async getAllRedatores(): Promise<Redator[]> {
-    return prisma.redator.findMany({
-      include: {
-        user: true,
-        posts: true
-      },
-      where: { isAdm: true }
-    });
-  },
-
-  async getRedatorById(id: number): Promise<Redator | null> {
-    return prisma.redator.findUnique({
+  async createRedator(id: number): Promise<User> {
+    return prisma.user.update({
       where: { id },
-      include: { user: true, posts: true }
+      data: { isRedator: true },
     });
   },
 
-  async deleteRedator(id: number): Promise<Redator> {
-    return prisma.redator.delete({
-      where: { userId: id }
+  async getAllRedatores(): Promise<User[]> {
+    return prisma.user.findMany({
+      include: {
+        Post: true,
+        Comentary: true
+      },
+      where: { isRedator: true }
     });
   },
 
-  // Funções de Posts
-  async createPost(authorId: number, postData: { title: string; subtitle: string; body: string }): Promise<Post> {
-    return prisma.post.create({
-      data: {
-        ...postData,
-        authorId
-      }
+  async demoteRedator(id: number): Promise<User> {
+    return prisma.user.update({
+      where: { id },
+      data: { isRedator: false }
     });
   },
-
-  async updatePost(postId: number, postData: { title?: string; subtitle?: string; body?: string }): Promise<Post> {
-    return prisma.post.update({
-      where: { id: postId },
-      data: postData
-    });
-  },
-
-  async deletePost(postId: number): Promise<Post> {
-    return prisma.post.delete({
-      where: { id: postId }
-    });
-  }
 };
 
 export default RedatorService;

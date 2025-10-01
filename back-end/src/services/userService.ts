@@ -9,7 +9,10 @@ const UserService = {
     },
     
     async getUserById(id: number): Promise<User | null> {
-        return prisma.user.findUnique({where: { id }});
+        return prisma.user.findUnique({
+            where: { id },
+            include: { Post: true, Comentary: true }
+        });
     },
 
     async createUser(data: { nickname: string; email: string; password: string}): Promise<User> {

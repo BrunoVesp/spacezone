@@ -4,17 +4,30 @@ import { PostDataCreateType } from "../types/postDataCreate";
 
 const PostsService = {
     async getAllPosts(): Promise<Post[]> {
-        return prisma.post.findMany();
+        return prisma.post.findMany({
+            include: {
+                author: {
+                    select: { nickname: true }
+                }
+            }
+        });
     },
 
     async getPostbyId(id: number): Promise<Post | null> {
-        return prisma.post.findUnique({ where: { id } });
+        return prisma.post.findUnique({
+            where: { id },
+            include: {
+                author: {
+                    select: { nickname: true }
+                }
+            }
+        });
     },
 
-    async createPost(userId: number, data: PostDataCreateType): Promise<Post> {
-        const redator = await prisma.redator.findUnique({ where: { userId } });
+    async createPost(id: number, data: PostDataCreateType): Promise<Post> {
+        const redator = await prisma.user.findUnique({ where: { id } });
 
-        if (!redator) {
+        if (!redator?.isRedator) {
             throw new Error("Somente redatores podem criar posts.");
         }
 
@@ -28,22 +41,14 @@ const PostsService = {
         });
     },
 
-    async updatePost(id: number, data: Partial<PostDataCreateType>, userId: number): Promise<Post> {
-        const redator = await prisma.redator.findUnique({ where: { userId } });
-        if (!redator) {
-            throw new Error("Somente redatores podem atualizar posts.");
-        }
+    async updatePost(id: number, data: Partial<PostDataCreateType>): Promise<Post> {
         return prisma.post.update({
             where: { id },
             data,
         });
     },
 
-    async deletePost(id: number, userId: number): Promise<Post> {
-        const redator = await prisma.redator.findUnique({ where: { userId } });
-        if (!redator) {
-            throw new Error("Somente redatores podem deletar posts.");
-        }
+    async deletePost(id: number): Promise<Post> {
         return prisma.post.delete({
             where: { id },
         });
