@@ -13,7 +13,7 @@ const UserService = {
     },
 
     async createUser(data: { nickname: string; email: string; password: string}): Promise<User> {
-        return prisma.user.create({data,});
+        return prisma.user.create({ data });
     },
 
     async updateUser(id: number, data: { nickname?: string; email?: string; password?: string }): Promise<User> {

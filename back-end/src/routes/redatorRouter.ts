@@ -10,9 +10,4 @@ router.get("/redatores", RedatorController.getAllRedatores);
 router.get("/redatores/:id", RedatorController.getRedatorById);
 router.delete("/redatores/demote/:id", authMiddleware, RedatorController.demoteRedator);
 
-// Posts
-router.post("/redatores/:id/posts", authMiddleware, RedatorController.createPost);
-router.put("/posts/:postId", authMiddleware, RedatorController.updatePost);
-router.delete("/posts/:postId", authMiddleware, RedatorController.deletePost);
-
 export default router;

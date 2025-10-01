@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import UserService from '../services/userService';
 import { User } from '../generated/prisma';
 import bcrypt from 'bcrypt';
+import { UserDataUpdateType } from '../types/userDataCreate';
+import { createUserSchema, loginUserSchema, updateUserSchema } from '../schemas/userSchema';
+import { idSchema } from '../schemas/idSchema';
 
 const UserController = {
     async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -14,9 +17,14 @@ const UserController = {
     },
 
     async getUserById(req: Request, res: Response): Promise<void> {
-        const id: number = parseInt(req.params.id, 10);
-        if (isNaN(id) || id <= 0) {
-            res.status(400).json({ message: 'Invalid user ID' });
+        let id: number;
+        try {
+            ({ id } = idSchema.parse(req.params));
+        } catch (error: any) {
+            res.status(400).json({
+                message: 'ID inválido',
+                errors: (error.errors ?? error.issues)?.map((e: any) => e.message) ?? [error.message]
+            });
             return;
         }
 
@@ -38,24 +46,13 @@ const UserController = {
     },
 
     async createUser(req: Request, res: Response): Promise<void> {
-        const { nickname, email, password }: { nickname: string; email: string; password: string } = req.body;
-        if (typeof nickname !== 'string' || nickname.trim() === '') {
-            res.status(400).json({ message: 'Nickname Invalido' });
-            return;
-        }
-        if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.trim() === '') {
-            res.status(400).json({ message: 'Email Invalido' });
-            return;
-        }
-        if (typeof password !== 'string' || password.length < 6) {
-            res.status(400).json({ message: 'Password Invalida' });
-            return;
-        }
+        const data = createUserSchema.parse(req.body)
 
         try {
             const salt: string = await bcrypt.genSalt();
-            const hashedPassword: string = await bcrypt.hash(password, salt);
-            const newUser: User = await UserService.createUser({ nickname, email, password: hashedPassword });
+            const hashedPassword: string = await bcrypt.hash(data.password, salt);
+            data.password = hashedPassword;
+            const newUser: User = await UserService.createUser(data);
             res.status(201).json(newUser);
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
@@ -63,9 +60,14 @@ const UserController = {
     },
 
     async updateUser(req: Request, res: Response): Promise<void> {
-        const id: number = parseInt(req.params.id, 10);
-        if (isNaN(id) || id <= 0) {
-            res.status(400).json({ message: 'Invalid user ID' });
+        let id: number;
+        try {
+            ({ id } = idSchema.parse(req.params));
+        } catch (error: any) {
+            res.status(400).json({
+                message: 'ID inválido',
+                errors: (error.errors ?? error.issues)?.map((e: any) => e.message) ?? [error.message]
+            });
             return;
         }
 
@@ -74,42 +76,20 @@ const UserController = {
             return;
         }
 
-        const { nickname, email, password }: { nickname?: string; email?: string; password?: string } = req.body;
-        const dataUpdate: { nickname?: string; email?: string; password?: string } = {};
+        let dataUpdate: UserDataUpdateType;
+        try {
+            dataUpdate = updateUserSchema.parse(req.body);
 
-        if (nickname !== undefined) {
-            if (typeof nickname !== 'string' || nickname.trim() === '') {
-                res.status(400).json({ message: 'Nickname Invalido' });
-                return;
-            }
-            dataUpdate.nickname = nickname;
-        }
-
-        if (email !== undefined) {
-            if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.trim() === '') {
-                res.status(400).json({ message: 'Email Invalido' });
-                return;
-            }
-            dataUpdate.email = email;
-        }
-
-        if (password !== undefined) {
-            if (typeof password !== 'string' || password.length < 6) {
-                res.status(400).json({ message: 'Password Invalida' });
-                return;
-            }
-            try {
+            if (dataUpdate.password !== undefined) {
                 const salt: string = await bcrypt.genSalt();
-                const hashedPassword: string = await bcrypt.hash(password, salt);
+                const hashedPassword: string = await bcrypt.hash(dataUpdate.password, salt);
                 dataUpdate.password = hashedPassword;
-            } catch (error) {
-                res.status(500).json({ message: 'Error hashing password' });
-                return;
             }
-        }
-
-        if (Object.keys(dataUpdate).length === 0) {
-            res.status(400).json({ message: 'No valid fields to update' });
+        } catch (error: any) {
+            res.status(400).json({
+                message: 'Dados inválidos',
+                errors: (error.errors ?? error.issues)?.map((e: any) => e.message) ?? [error.message]
+            });
             return;
         }
 
@@ -122,9 +102,14 @@ const UserController = {
     },
 
     async deleteUser(req: Request, res: Response): Promise<void> {
-        const id: number = parseInt(req.params.id, 10);
-        if (isNaN(id) || id <= 0) {
-            res.status(400).json({ message: 'Invalid user ID' });
+        let id: number;
+        try {
+            ({ id } = idSchema.parse(req.params));
+        } catch (error: any) {
+            res.status(400).json({
+                message: 'ID inválido',
+                errors: (error.errors ?? error.issues)?.map((e: any) => e.message) ?? [error.message]
+            });
             return;
         }
 
@@ -142,19 +127,19 @@ const UserController = {
     },
 
     async loginUser(req: Request, res: Response): Promise<void> {
-        const { email, password }: { email: string; password: string } = req.body;
-        if (typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.trim() === '') {
-            res.status(400).json({ message: 'Email Invalido' });
-            return;
-        }
-
-        if (typeof password !== 'string' || password.length < 6) {
-            res.status(400).json({ message: 'Password Invalida' });
+        let data;
+        try {
+            data = loginUserSchema.parse(req.body);
+        } catch (error: any) {
+            res.status(400).json({
+                message: 'Dados inválidos',
+                errors: (error.errors ?? error.issues)?.map((e: any) => e.message) ?? [error.message]
+            });
             return;
         }
 
         try {
-            const result: { user: User; token: string } | null = await UserService.loginUser(email, password);
+            const result: { user: User; token: string } | null = await UserService.loginUser(data.email, data.password);
             if (result) {
                 res.status(200).json(result);
             } else {
