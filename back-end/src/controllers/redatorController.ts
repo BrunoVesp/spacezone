@@ -16,8 +16,12 @@ const RedatorController = {
       return;
     }
 
+    const redatores = await prisma.user.findMany({
+      where: { isRedator: true }
+    })
+
     const redator = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (!redator?.isRedator) {
+    if (redatores.length > 0 && !redator?.isRedator) {
       res.status(403).json({ message: 'Apenas redatores podem promover usuários.' });
       return;
     }
