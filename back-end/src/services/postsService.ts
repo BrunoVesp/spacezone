@@ -1,3 +1,4 @@
+import { Comentary } from './../generated/prisma/index.d';
 import prisma from "../db/prisma";
 import { Post } from "../generated/prisma";
 import { PostDataCreateType } from "../types/postDataCreate";
@@ -6,7 +7,16 @@ const PostsService = {
     async getAllPosts(): Promise<Post[]> {
         return prisma.post.findMany({
             include: {
-                comentarys: true,
+                comentarys: {
+                    select: {
+                        createdAt: true,
+                        isUpdated: true,
+                        content: true,
+                        user: {
+                            select: { nickname: true }
+                        }
+                    }
+                },
                 author: {
                     select: { nickname: true }
                 }
@@ -18,7 +28,16 @@ const PostsService = {
         return prisma.post.findUnique({
             where: { id },
             include: {
-                comentarys: true,
+                comentarys: {
+                    select: {
+                        createdAt: true,
+                        isUpdated: true,
+                        content: true,
+                        user: {
+                            select: { nickname: true }
+                        }
+                    }
+                },
                 author: {
                     select: { nickname: true }
                 }

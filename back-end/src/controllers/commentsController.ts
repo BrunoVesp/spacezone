@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
 import ComentaryService from "../services/commentsService";
+import { idSchema } from "../schemas/idSchema";
+import { commentSchema } from "../schemas/commentSchema";
+import { commentType } from "../types/commentType";
+import { ZodError } from "zod";
 
 const ComentaryController = {
     async getAll(req: Request, res: Response) {
@@ -23,14 +27,22 @@ const ComentaryController = {
     },
 
     async create(req: Request, res: Response) {
+        let postId: number;
         try {
-            const { content, postId } = req.body;
+            ({ id: postId } = idSchema.parse({ id: req.params.postId }));
+            const data: commentType = commentSchema.parse(req.body);
             const userid = req.user.id
-            if (!content || !userid) return res.status(400).json({ error: "Dados inválidos" });
 
-            const comentary = await ComentaryService.createComentary({ content, userid, postId });
+            const comentary = await ComentaryService.createComentary(data, userid, postId);
             res.status(201).json(comentary);
-        } catch (err) {
+        } catch (error: any) {
+            if (error instanceof ZodError) {
+                res.status(400).json({
+                    errors: error.issues.map((e: any) => e.message)
+                });
+            } else {
+                res.status(400).json({ message: error.message || "Erro ao publicar post" });
+            }
             res.status(500).json({ error: "Erro ao criar comentário" });
         }
     },

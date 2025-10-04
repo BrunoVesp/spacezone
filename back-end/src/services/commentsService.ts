@@ -1,11 +1,14 @@
 import prisma from "../db/prisma";
 import { Comentary } from "../generated/prisma";
+import { commentType } from "../types/commentType";
 
 const ComentaryService = {
     async getAllComentaries(): Promise<Comentary[]> {
         return prisma.comentary.findMany({
             include: {
-                user: true,
+                user: {
+                    select: { nickname: true }
+                },
                 Post: true
             }
         });
@@ -15,18 +18,20 @@ const ComentaryService = {
         return prisma.comentary.findUnique({
             where: { id },
             include: {
-                user: true,
+                user: {
+                    select: { nickname: true }
+                },
                 Post: true
             }
         });
     },
 
-    async createComentary(data: { content: string; userid: number; postId?: number }): Promise<Comentary> {
+    async createComentary(data: commentType, userId: number, postId: number): Promise<Comentary> {
         return prisma.comentary.create({
             data: {
                 content: data.content,
-                userid: data.userid,
-                postId: data.postId,
+                userid: userId,
+                postId: postId,
                 isUpdated: false
             },
             include: {
