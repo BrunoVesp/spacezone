@@ -36,8 +36,8 @@ model Comentary {
   createdAt DateTime @default(now())
   updateAt  DateTime @updatedAt
   isUpdated Boolean
-  userid    Int
-  user      User     @relation(fields: [userid], references: [id], onDelete: Cascade)
-  Post      Post?    @relation(fields: [postId], references: [id])
+  userid    Int?
+  user      User?     @relation(fields: [userid], references: [id], onDelete: SetNull)
+  Post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int?
 }

@@ -6,6 +6,7 @@ const PostsService = {
     async getAllPosts(): Promise<Post[]> {
         return prisma.post.findMany({
             include: {
+                comentarys: true,
                 author: {
                     select: { nickname: true }
                 }
@@ -17,6 +18,7 @@ const PostsService = {
         return prisma.post.findUnique({
             where: { id },
             include: {
+                comentarys: true,
                 author: {
                     select: { nickname: true }
                 }
