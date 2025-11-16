@@ -58,6 +58,7 @@ const PostsService = {
                 subtitle: data.subtitle,
                 body: data.body,
                 authorId: redator.id,
+                image: data.image || null,
             },
         });
     },
