@@ -1,0 +1,15 @@
+@use '../../styles/variables' as *;
+
+.logo {
+    a {
+        color: $titleColor;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #fff;
+
+        img {
+            width: 64px;
+        }
+    }
+}

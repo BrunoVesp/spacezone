@@ -1,0 +1,54 @@
+@use '../../styles/variables' as *;
+
+.authenticationContainer {
+    border-radius: 8px;
+    padding: 32px;
+    background-color: $primaryColor;
+    width: 100%;
+    max-width: 500px;
+    margin: 16px 0px;
+
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 24px;
+        margin-bottom: 32px;
+
+        h2 {
+            color: $titleColor;
+            font-size: 22px;
+        }
+
+        p {
+            color: $textColor;
+            font-size: 14px;
+        }
+    }
+
+    main {
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+    }
+
+    footer {
+        margin-top: 32px;
+        p {
+            font-size: 14px;
+            color: $titleColor;
+            text-align: center;
+
+            a {
+                color: $textColor;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+}

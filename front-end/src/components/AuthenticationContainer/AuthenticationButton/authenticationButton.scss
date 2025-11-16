@@ -1,0 +1,17 @@
+@use '../../../styles/variables' as *;
+
+.authenticationButton {
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    background-color: $tagColor;
+    color: $titleColor;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .3s;
+
+    &:hover {
+        background-color: $textColor;
+    }
+}

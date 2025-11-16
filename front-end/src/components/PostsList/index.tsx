@@ -1,15 +1,21 @@
-import axios from 'axios';
+import './postsList.scss';
 import type { Posts } from '../../types/Posts';
 import { useEffect, useState } from 'react';
+import PostCard from '../PostCard';
+import postImage from '../../assets/images/post.jpg'; //temporário enquanto não tem imagem na api
+import { http } from '../../http/http';
 
-const PostsList = () => {
+interface PostsListProps {
+    postsListTitle?: string;
+}
+
+const PostsList = ({ postsListTitle }: PostsListProps) => {
     const [posts, setPosts] = useState<Posts[]>([]);
 
     async function fetchPosts() {
-        axios.get<Posts[]>("http://localhost:3000/posts")
+        await http<Posts[]>("/posts")
             .then(response => {
                 setPosts(response.data);
-                console.log(response.data)
             })
             .catch(error => console.log(error));
     }
@@ -19,21 +25,26 @@ const PostsList = () => {
     }, [])
 
     return (
-        <ul>
-            {posts.map(post =>
-                <li key={post.id}>
-                    <header>
-                        <h1>{post.title}</h1>
-                        <h2>{post.subtitle}</h2>
-                    </header>
-                    <main>
-                        <p>
-                            {post.body}
-                        </p>
-                    </main>
-                </li>
-            )}
-        </ul>
+        <div className='postsList'>
+            <h2 className='postsListTitle'>{postsListTitle}</h2>
+            <ul>
+                {posts.map((post, index) =>
+                    <li key={index}>
+                        <PostCard
+                            image={postImage}
+                            // aqui está de forma estática por enquanto
+                            tags={
+                                ["Estrelas", "Galaxias"]
+                            }
+                            title={post.title}
+                            subtitle={post.subtitle}
+                            author={post.author?.nickname ?? "Usuário deletado"}
+                            createdAt={post.createdAt}
+                        />
+                    </li>
+                )}
+            </ul>
+        </div>
     );
 }
 

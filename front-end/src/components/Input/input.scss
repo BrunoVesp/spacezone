@@ -1,0 +1,28 @@
+@use '../../styles/variables' as *;
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    border: 1px solid $borderColor;
+    padding: 0px 8px;
+    width: 100%;
+    color: $titleColor;
+
+    .iconWrapper {
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    input {
+        border: none;
+        outline: none;
+        padding: 10px 0px 10px 10px;
+        background: transparent;
+        font-size: 16px;
+        width: 100%;
+        color: $titleColor;
+    }
+}

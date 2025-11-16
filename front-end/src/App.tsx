@@ -1,11 +1,26 @@
-import PostsList from "./components/PostsList";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home";
+import Layout from "./layout/layout";
+import Posts from "./pages/Posts";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import { ToastProvider } from "./components/Toast/ToastProvider";
 
 function App() {
-
   return (
-    <>
-      <PostsList />
-    </>
+    <BrowserRouter>
+      <ToastProvider>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+        </Routes>
+      </ToastProvider>
+    </BrowserRouter >
+
   )
 }
 
