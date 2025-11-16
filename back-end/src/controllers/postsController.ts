@@ -6,6 +6,7 @@ import { ZodError } from "zod";
 import { PostDataCreateType } from "../types/postDataCreate";
 import { idSchema } from "../schemas/idSchema";
 import prisma from "../db/prisma";
+import { deleteFile } from "../middleware/deletefile";
 
 const PostsController = {
     async getAllPosts(req: Request, res: Response): Promise<void> {
@@ -49,6 +50,11 @@ const PostsController = {
             const data = postCreateSchema.parse(req.body);
             const id: number = req.user.id;
 
+            if(req.file)
+            {
+                data.image = `/uploads/${req.file.filename}`;
+            }
+
             if (!id) {
                 res.status(401).json({ error: "Usuário não autenticado." });
                 return;
@@ -91,7 +97,23 @@ const PostsController = {
                 throw new Error("Somente redatores podem atualizar posts.");
             }
 
+            const existingPost = await prisma.post.findUnique({ where: { id } });
+            if (!existingPost) {
+                res.status(404).json({ message: "Post não encontrado." });
+                return;
+            }
+
+
             const data = postUpdateSchema.parse(req.body);
+            
+            if(req.file)
+            {
+                if (existingPost.image) {
+                    deleteFile(existingPost.image);
+                }
+                data.image = `/uploads/${req.file.filename}`;
+            }
+            
             const updatedPost = await PostsService.updatePost(id, data);
             res.status(200).json(updatedPost);
         } catch (error: any) {
@@ -121,6 +143,19 @@ const PostsController = {
             if (!redator?.isRedator) {
                 throw new Error("Somente redatores podem deletar posts.");
             }
+
+            const post = await prisma.post.findUnique({ where: { id } });
+            if (!post) 
+            {
+                res.status(404).json({ message: "Post não encontrado." });
+                return;
+            }
+
+            if (post.image) 
+            {
+                deleteFile(post.image);
+            }
+            
             const deletedPost = await PostsService.deletePost(id);
             res.status(204).json(deletedPost);
         } catch (error: any) {

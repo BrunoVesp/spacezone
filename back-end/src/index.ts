@@ -4,8 +4,9 @@ import userRouter from './routes/userRouter';
 import redatorRoutes from './routes/redatorRouter';
 import postsRoutes from './routes/postsRouter';
 import commentsRouter from './routes/commentsRouter';
-import swaggerUi from "swagger-ui-express";
-import { swaggerSpec } from './docs/swagger';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './docs/swagger.json';
+import path from "path";
 
 const port = process.env.PORT || 3000;
 const app: Express = express();
@@ -31,10 +32,10 @@ app.use(postsRoutes);
 // Rotas de comentários
 app.use(commentsRouter);
 
-// Swagger
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 
 app.listen(port, () => {
-    console.log(`API rodando na porta ${port}`);
+    console.log(`A API subiu na porta ${port}`);
     console.log(`Swagger disponível em http://localhost:${port}/api-docs`);
 });

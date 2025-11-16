@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt';
 import { UserDataUpdateType } from '../types/userDataCreate';
 import { createUserSchema, loginUserSchema, updateUserSchema } from '../schemas/userSchema';
 import { idSchema } from '../schemas/idSchema';
+import { deleteFile } from '../middleware/deletefile';
 
 const UserController = {
     async getAllUsers(req: Request, res: Response): Promise<void> {
@@ -49,6 +50,10 @@ const UserController = {
         const data = createUserSchema.parse(req.body)
 
         try {
+            if (req.file)
+            {
+                data.profileImage = `/uploads/${req.file.filename}`;
+            }
             const salt: string = await bcrypt.genSalt();
             const hashedPassword: string = await bcrypt.hash(data.password, salt);
             data.password = hashedPassword;
@@ -78,7 +83,21 @@ const UserController = {
 
         let dataUpdate: UserDataUpdateType;
         try {
+            const existingUser = await UserService.getUserById(id);
+            if (!existingUser) {
+                res.status(404).json({ message: "Usuário não encontrado." });
+                return;
+            }
+
             dataUpdate = updateUserSchema.parse(req.body);
+
+            if (req.file)
+            {
+                if (existingUser.profileImage) {
+                    deleteFile(existingUser.profileImage);
+                }
+                dataUpdate.profileImage = `/uploads/${req.file.filename}`;
+            }
 
             if (dataUpdate.password !== undefined) {
                 const salt: string = await bcrypt.genSalt();
@@ -119,6 +138,17 @@ const UserController = {
         }
 
         try {
+            const user = await UserService.getUserById(id);
+
+            if (!user) {
+                res.status(404).json({ message: "Usuário não encontrado." });
+                return;
+            }
+
+            if (user.profileImage) {
+                deleteFile(user.profileImage);
+            }
+
             const deletedUser: User = await UserService.deleteUser(id);
             res.status(200).json(deletedUser);
         } catch (error) {

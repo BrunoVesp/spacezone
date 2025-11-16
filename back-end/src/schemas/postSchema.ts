@@ -13,7 +13,12 @@ export const postCreateSchema = z.object({
 
     body: z
     .string()
-    .min(1, "O corpo do post é obrigatório")
+    .min(1, "O corpo do post é obrigatório"),
+
+    image: z
+    .string()
+    .nullable()
+    .optional()
 });
 
 export const postUpdateSchema = z.object({
@@ -32,5 +37,8 @@ export const postUpdateSchema = z.object({
     body: z
     .string()
     .min(1, "O corpo do post é obrigatório")
+    .optional(),
+    image: z
+    .string()
     .optional()
 });

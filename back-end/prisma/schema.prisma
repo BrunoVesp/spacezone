@@ -18,6 +18,7 @@ model User {
   isRedator Boolean     @default(false)
   Comentary Comentary[]
   Post      Post[]
+  profileImage String?
 }
 
 model Post {
@@ -30,6 +31,7 @@ model Post {
   updateAt   DateTime?    @updatedAt
   author     User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
   comentarys Comentary[]
+  image      String?
 }
 
 model Comentary {
