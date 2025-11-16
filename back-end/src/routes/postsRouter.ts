@@ -5,7 +5,43 @@ import { upload } from "../middleware/multer";
 
 const router = Router();
 
-router.get("/posts",  PostsController.getAllPosts);
+/**
+ * @swagger
+ * tags:
+ *   name: Posts
+ *   description: Operações de posts
+ */
+
+/**
+ * @swagger
+ * /posts:
+ *   get:
+ *     summary: Lista todos os posts
+ *     tags: [Posts]
+ *     responses:
+ *       200:
+ *         description: Lista de posts
+ */
+router.get("/posts", PostsController.getAllPosts);
+
+/**
+ * @swagger
+ * /posts/{id}:
+ *   get:
+ *     summary: Busca um post por ID
+ *     tags: [Posts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Post encontrado
+ *       404:
+ *         description: Post não encontrado
+ */
 router.get("/posts/:id", PostsController.getPostById);
 router.post("/posts", upload.single("image"), authMiddleware, PostsController.createPost);
 router.put("/posts/:id", upload.single("image"), authMiddleware, PostsController.updatePost);

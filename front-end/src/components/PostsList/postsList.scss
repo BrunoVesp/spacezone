@@ -1,0 +1,22 @@
+@use '../../styles/variables' as *;
+
+.postsList {
+    background-color: $primaryColor;
+    border-radius: 8px;
+    border: 1px solid $borderColor;
+    margin: 16px 0px;
+    padding: 16px;
+
+    .postsListTitle {
+        font-size: 20px;
+        color: $titleColor;
+        font-weight: 700;
+        margin-bottom: 16px;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+}
