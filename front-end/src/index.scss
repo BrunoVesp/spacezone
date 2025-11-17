@@ -9,7 +9,7 @@
 
 body {
   background-color: $secundaryColor;
-  padding-bottom: 50px;
+  padding-bottom: 66px;
 }
 
 ul,
@@ -20,4 +20,10 @@ li {
 
 a {
   text-decoration: none;
+}
+
+@media (min-width: $desktopBreakpoint) {
+  body {
+    padding-bottom: 0px;
+  }
 }

@@ -33,9 +33,7 @@ const PostsList = ({ postsListTitle }: PostsListProps) => {
                         <PostCard
                             image={postImage}
                             // aqui está de forma estática por enquanto
-                            tags={
-                                ["Estrelas", "Galaxias"]
-                            }
+                            tags={["Estrelas"]}
                             title={post.title}
                             subtitle={post.subtitle}
                             author={post.author?.nickname ?? "Usuário deletado"}

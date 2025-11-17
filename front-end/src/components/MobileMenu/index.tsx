@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import './mobileMenu.scss';
-import { FaHome, FaNewspaper, FaSignInAlt } from "react-icons/fa";
+import { FaHome, FaNewspaper, FaSignInAlt, FaRegUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
+import { useIsAuthenticated } from "../../hooks/useIsAuthenticated";
 
 const MobileMenu = () => {
+    const { isAuthenticated } = useIsAuthenticated();
+
     return (
         <nav className="mobileMenu">
             <ul>
@@ -25,12 +28,20 @@ const MobileMenu = () => {
                         <span>Sobre Nós</span>
                     </Link>
                 </li>
-                <li>
-                    <Link to="/login">
-                        <FaSignInAlt />
-                        <span>Entrar</span>
-                    </Link>
-                </li>
+                {!isAuthenticated &&
+                    <li>
+                        <Link to="/login">
+                            <FaSignInAlt />
+                            <span>Entrar</span>
+                        </Link>
+                    </li>}
+                {isAuthenticated &&
+                    <li>
+                        <Link to="/perfil">
+                            <FaRegUser />
+                            <span>Perfil</span>
+                        </Link>
+                    </li>}
             </ul>
         </nav>
     );
