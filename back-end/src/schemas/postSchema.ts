@@ -15,6 +15,31 @@ export const postCreateSchema = z.object({
     .string()
     .min(1, "O corpo do post é obrigatório"),
 
+    tags: z
+    .array(
+            z.enum([
+                "POLITICA",
+                "ESPORTES",
+                "ENTRETENIMENTO",
+                "TECNOLOGIA",
+                "ECONOMIA",
+                "MUNDO",
+                "SAUDE",
+                "CULTURA",
+                "CIENCIA",
+                "OPINIAO",
+                "ENTREVISTAS",
+                "REPORTAGENS",
+                "VIDEOS",
+                "FOTOS",
+                "PODCASTS",
+                "EVENTOS",
+                "LIFESTYLE",
+                "VIAGENS"
+            ])
+    )
+    .nonempty("É obrigatório incluir pelo menos 1 tag"),
+
     image: z
     .string()
     .nullable()
@@ -38,6 +63,32 @@ export const postUpdateSchema = z.object({
     .string()
     .min(1, "O corpo do post é obrigatório")
     .optional(),
+
+    tags: z
+    .array(
+            z.enum([
+                "POLITICA",
+                "ESPORTES",
+                "ENTRETENIMENTO",
+                "TECNOLOGIA",
+                "ECONOMIA",
+                "MUNDO",
+                "SAUDE",
+                "CULTURA",
+                "CIENCIA",
+                "OPINIAO",
+                "ENTREVISTAS",
+                "REPORTAGENS",
+                "VIDEOS",
+                "FOTOS",
+                "PODCASTS",
+                "EVENTOS",
+                "LIFESTYLE",
+                "VIAGENS"
+            ])
+        )
+    .optional(),
+
     image: z
     .string()
     .optional()

@@ -4,6 +4,7 @@ import { idSchema } from "../schemas/idSchema";
 import { commentSchema } from "../schemas/commentSchema";
 import { commentType } from "../types/commentType";
 import { ZodError } from "zod";
+import { getPagination, buildPaginationLinks} from "../middleware/pagination";
 
 const ComentaryController = {
     async getAll(req: Request, res: Response) {
@@ -91,8 +92,14 @@ const ComentaryController = {
     async getByPost(req: Request, res: Response) {
         try {
             const postId = Number(req.params.postId);
-            const comentaries = await ComentaryService.getComentariesByPost(postId);
-            res.json(comentaries);
+
+            const { page, limit, skip } = getPagination(req);
+
+            const { comentaries, total } = await ComentaryService.getComentariesByPost(postId, skip, limit);
+
+            const pagination = buildPaginationLinks(req, page, limit, total);
+
+            res.json({ ...pagination, data: comentaries });
         } catch (err) {
             res.status(500).json({ error: "Erro ao buscar comentários do post" });
         }
@@ -101,8 +108,16 @@ const ComentaryController = {
     async getByUser(req: Request, res: Response) {
         try {
             const userId = Number(req.params.userId);
-            const comentaries = await ComentaryService.getComentariesByUser(userId);
-            res.json(comentaries);
+            
+            if (!req.user || req.user.id !== userId) {
+                return res.status(403).json({ error: "Acesso negado" });
+            }
+
+            const { page, limit, skip } = getPagination(req);
+            const { comentaries, total } = await ComentaryService.getComentariesByUser(userId, skip, limit);
+            const pagination = buildPaginationLinks(req, page, limit, total);
+
+            res.json({ ...pagination, data: comentaries });
         } catch (err) {
             res.status(500).json({ error: "Erro ao buscar comentários do usuário" });
         }

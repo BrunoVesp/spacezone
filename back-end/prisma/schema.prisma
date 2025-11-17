@@ -30,6 +30,9 @@ model Post {
   author     User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
   comentarys Comentary[]
   image      String?
+  createdAt DateTime    @default(now())
+  updateAt  DateTime    @updatedAt
+  tags       TagType[]
 }
 
 model Comentary {
@@ -42,4 +45,25 @@ model Comentary {
   user      User?     @relation(fields: [userid], references: [id], onDelete: SetNull)
   Post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int?
+}
+
+enum TagType {
+  POLITICA
+  ESPORTES
+  ENTRETENIMENTO
+  TECNOLOGIA
+  ECONOMIA
+  MUNDO
+  SAUDE
+  CULTURA
+  CIENCIA
+  OPINIAO
+  ENTREVISTAS
+  REPORTAGENS
+  VIDEOS
+  FOTOS
+  PODCASTS
+  EVENTOS
+  LIFESTYLE
+  VIAGENS
 }

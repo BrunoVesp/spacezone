@@ -4,10 +4,39 @@ import { Post } from "../generated/prisma";
 import { PostDataCreateType } from "../types/postDataCreate";
 
 const PostsService = {
-    async getAllPosts(): Promise<Post[]> {
+    async getAllPosts(skip: number, limit: number): Promise<any[]> {
         return prisma.post.findMany({
+            skip,
+            take: limit,
+            select: {
+                id: true,
+                title: true,
+                subtitle: true,
+                createdAt: true, // Incluindo a data de criação
+                image: true,     // Incluindo a imagem
+                author: {
+                    select: { nickname: true } // Incluindo o autor
+                    }
+            },
+                orderBy: { id: "desc" }
+            });
+},
+    
+    async countPosts(): Promise<number> {
+        return prisma.post.count();
+    },
+
+    async getPostbyId(id: number, skip: number, take: number): Promise<Post | null> {
+        return prisma.post.findUnique({
+            where: { id },
             include: {
+                author: {
+                    select: { nickname: true }
+                },
                 comentarys: {
+                    skip,
+                    take,
+                    orderBy: { createdAt: "desc" },
                     select: {
                         createdAt: true,
                         isUpdated: true,
@@ -16,32 +45,32 @@ const PostsService = {
                             select: { nickname: true }
                         }
                     }
-                },
-                author: {
-                    select: { nickname: true }
                 }
             }
         });
     },
 
-    async getPostbyId(id: number): Promise<Post | null> {
-        return prisma.post.findUnique({
-            where: { id },
+    async countCommentsByPost(postId: number) {
+        return prisma.comentary.count({
+            where: { postId }
+        });
+    },
+
+    async getPostsByUser(userId: number, skip: number, limit: number) {
+        return prisma.post.findMany({
+            where: { authorId: userId },
+            skip,
+            take: limit,
+            orderBy: { createdAt: "desc" },
             include: {
-                comentarys: {
-                    select: {
-                        createdAt: true,
-                        isUpdated: true,
-                        content: true,
-                        user: {
-                            select: { nickname: true }
-                        }
-                    }
-                },
-                author: {
-                    select: { nickname: true }
-                }
+                author: { select: { nickname: true } }
             }
+        });
+    },
+
+    async countPostsByUser(userId: number) {
+        return prisma.post.count({
+            where: { authorId: userId }
         });
     },
 
@@ -59,6 +88,7 @@ const PostsService = {
                 body: data.body,
                 authorId: redator.id,
                 image: data.image || null,
+                tags: data.tags,
             },
         });
     },
@@ -75,6 +105,60 @@ const PostsService = {
             where: { id },
         });
     },
+
+    async searchPosts(query: string, skip: number, take: number) {
+        // Todas as tags possíveis
+        const validTags = [
+            "POLITICA",
+            "ESPORTES",
+            "ENTRETENIMENTO",
+            "TECNOLOGIA",
+            "ECONOMIA",
+            "MUNDO",
+            "SAUDE",
+            "CULTURA",
+            "CIENCIA",
+            "OPINIAO",
+            "ENTREVISTAS",
+            "REPORTAGENS",
+            "VIDEOS",
+            "FOTOS",
+            "PODCASTS",
+            "EVENTOS",
+            "LIFESTYLE",
+            "VIAGENS"
+        ] as const;
+
+        // Verifica se o termo buscado é uma TAG válida
+        const tagFilter = validTags.includes(query.toUpperCase() as any)
+            ? { tags: { has: query.toUpperCase() as any } }
+            : undefined;
+
+        const whereFilter = {
+            OR: [
+                { title: { contains: query, mode: "insensitive" } },
+                { body: { contains: query, mode: "insensitive" } },
+                ...(tagFilter ? [tagFilter] : [])
+            ]
+        };
+
+        const [posts, total] = await prisma.$transaction([
+            prisma.post.findMany({
+                where: whereFilter,
+                skip,
+                take,
+                orderBy: { createdAt: "desc" },
+                include: {
+                    author: {
+                        select: { nickname: true }
+                    }
+                }
+            }),
+            prisma.post.count({ where: whereFilter })
+        ]);
+
+        return { posts, total };
+    }
 }
 
 export default PostsService;

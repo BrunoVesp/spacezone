@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import RedatorService from '../services/redatorService';
 import { idSchema } from "../schemas/idSchema";
 import prisma from "../db/prisma";
+import { getPagination, buildPaginationLinks} from "../middleware/pagination";
 
 const RedatorController = {
   async createRedator(req: Request, res: Response): Promise<void> {
@@ -36,10 +37,17 @@ const RedatorController = {
 
   async getAllRedatores(req: Request, res: Response) {
     try {
-      const redatores = await RedatorService.getAllRedatores();
-      res.status(200).json(redatores);
+        const { page, limit, skip } = getPagination(req);
+
+        const { total, redatores } = await RedatorService.getAllRedatores(skip, limit);
+
+        res.status(200).json({
+          pagination: buildPaginationLinks(req, page, limit, total),
+          data: redatores
+        });
+
     } catch (error) {
-      res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error' });
     }
   },
 

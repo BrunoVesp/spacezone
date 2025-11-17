@@ -5,10 +5,16 @@ import { upload } from "../middleware/multer";
 
 const router = Router();
 
+router.get("/posts/search", PostsController.search);
+
 router.get("/posts",  PostsController.getAllPosts);
 router.get("/posts/:id", PostsController.getPostById);
+
 router.post("/posts", upload.single("image"), authMiddleware, PostsController.createPost);
 router.put("/posts/:id", upload.single("image"), authMiddleware, PostsController.updatePost);
 router.delete("/posts/:id", authMiddleware, PostsController.deletePost);
+
+router.get("/posts/redator/:userId", authMiddleware, PostsController.getPostByUser);
+
 
 export default router;

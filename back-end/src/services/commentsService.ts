@@ -61,22 +61,40 @@ const ComentaryService = {
         });
     },
 
-    async getComentariesByPost(postId: number): Promise<Comentary[]> {
-        return prisma.comentary.findMany({
-            where: { postId },
-            include: {
-                user: true
-            }
-        });
+    async getComentariesByPost(postId: number,skip: number, take: number): Promise<{ comentaries: Comentary[]; total: number }> {
+        const [comentaries, total] = await prisma.$transaction([
+            prisma.comentary.findMany({
+                where: { postId },
+                skip,
+                take,
+                include: {
+                    user: { select: { nickname: true } }
+                }
+            }),
+            prisma.comentary.count({
+                where: { postId }
+            })
+        ]);
+
+    return { comentaries, total };
     },
 
-    async getComentariesByUser(userId: number): Promise<Comentary[]> {
-        return prisma.comentary.findMany({
-            where: { userid: userId },
-            include: {
-                Post: true
-            }
-        });
+    async getComentariesByUser(userId: number,skip: number, take: number): Promise<{ comentaries: Comentary[]; total: number }> {
+        const [comentaries, total] = await prisma.$transaction([
+            prisma.comentary.findMany({
+                where: { userid: userId },
+                skip,
+                take,
+                include: {
+                    Post: true
+                }
+            }),
+            prisma.comentary.count({
+                where: { userid: userId }
+            })
+        ]);
+        
+        return { comentaries, total };
     }
 };
 
