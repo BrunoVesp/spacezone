@@ -2,6 +2,8 @@ import { Comentary } from './../generated/prisma/index.d';
 import prisma from "../db/prisma";
 import { Post } from "../generated/prisma";
 import { PostDataCreateType } from "../types/postDataCreate";
+import { Prisma } from "@prisma/client";
+import { allowedTags } from '../schemas/postSchema';
 
 const PostsService = {
     async getAllPosts(skip: number, limit: number): Promise<any[]> {
@@ -107,41 +109,21 @@ const PostsService = {
     },
 
     async searchPosts(query: string, skip: number, take: number) {
-        // Todas as tags possíveis
-        const validTags = [
-            "POLITICA",
-            "ESPORTES",
-            "ENTRETENIMENTO",
-            "TECNOLOGIA",
-            "ECONOMIA",
-            "MUNDO",
-            "SAUDE",
-            "CULTURA",
-            "CIENCIA",
-            "OPINIAO",
-            "ENTREVISTAS",
-            "REPORTAGENS",
-            "VIDEOS",
-            "FOTOS",
-            "PODCASTS",
-            "EVENTOS",
-            "LIFESTYLE",
-            "VIAGENS"
-        ] as const;
+        const normalized = query.trim().toUpperCase();
 
-        // Verifica se o termo buscado é uma TAG válida
-        const tagFilter = validTags.includes(query.toUpperCase() as any)
-            ? { tags: { has: query.toUpperCase() as any } }
-            : undefined;
-
+        const matchedTags = allowedTags.filter(tag =>
+            tag.includes(normalized)
+        );
+        
         const whereFilter = {
             OR: [
-                { title: { contains: query, mode: "insensitive" } },
-                { body: { contains: query, mode: "insensitive" } },
-                ...(tagFilter ? [tagFilter] : [])
+                { title: { contains: query } },
+                { subtitle: { contains: query}},
+                { body: { contains: query } },
+                ...matchedTags.map(tag => ({ tags: { has: tag }}))
             ]
         };
-
+        
         const [posts, total] = await prisma.$transaction([
             prisma.post.findMany({
                 where: whereFilter,
@@ -159,6 +141,7 @@ const PostsService = {
 
         return { posts, total };
     }
+
 }
 
 export default PostsService;

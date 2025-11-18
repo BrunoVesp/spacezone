@@ -61,15 +61,11 @@ const PostsController = {
 
     async createPost(req: Request, res: Response): Promise<void> {
         try {
-            const data = postCreateSchema.parse({
-                ...req.body,
-                tags: req.body.tags ? JSON.parse(req.body.tags) : undefined
-            });
+            const data = postCreateSchema.parse(req.body);
             const id: number = req.user.id;
 
-            if (typeof data.tags === "string") 
-            {
-                data.tags = JSON.parse(data.tags);
+            if (data.tags) {
+                data.tags = normalizeTags(data.tags);
             }
 
             if(req.file)
@@ -130,12 +126,11 @@ const PostsController = {
             }
 
 
-            const data = postUpdateSchema.parse({
-                ...req.body,
-                tags: req.body.tags ? JSON.parse(req.body.tags) : undefined
-            });
+            const data = postUpdateSchema.parse(req.body);
 
-            data.tags = normalizeTags(req.body.tags);
+            if (data.tags) {
+                data.tags = normalizeTags(data.tags);
+            }
             
             if(req.file)
             {

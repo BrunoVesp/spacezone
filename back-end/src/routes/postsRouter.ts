@@ -5,44 +5,6 @@ import { upload } from "../middleware/multer";
 
 const router = Router();
 
-/**
- * @swagger
- * tags:
- *   name: Posts
- *   description: Operações de posts
- */
-
-/**
- * @swagger
- * /posts:
- *   get:
- *     summary: Lista todos os posts
- *     tags: [Posts]
- *     responses:
- *       200:
- *         description: Lista de posts
- */
-
-
-/**
- * @swagger
- * /posts/{id}:
- *   get:
- *     summary: Busca um post por ID
- *     tags: [Posts]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Post encontrado
- *       404:
- *         description: Post não encontrado
- */
-
 router.get("/posts/search", PostsController.search);
 
 router.get("/posts",  PostsController.getAllPosts);

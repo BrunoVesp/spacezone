@@ -27,14 +27,12 @@ model Post {
   subtitle   String
   body       String
   authorId   Int?
-  createdAt  DateTime    @default(now())
-  updateAt   DateTime?    @updatedAt
   author     User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
   comentarys Comentary[]
   image      String?
   createdAt DateTime    @default(now())
   updateAt  DateTime    @updatedAt
-  tags       TagType[]
+  tags       String[]
 }
 
 model Comentary {
@@ -49,23 +47,3 @@ model Comentary {
   postId    Int?
 }
 
-enum TagType {
-  POLITICA
-  ESPORTES
-  ENTRETENIMENTO
-  TECNOLOGIA
-  ECONOMIA
-  MUNDO
-  SAUDE
-  CULTURA
-  CIENCIA
-  OPINIAO
-  ENTREVISTAS
-  REPORTAGENS
-  VIDEOS
-  FOTOS
-  PODCASTS
-  EVENTOS
-  LIFESTYLE
-  VIAGENS
-}

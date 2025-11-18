@@ -20,6 +20,8 @@ app.use(cors({
     credentials: true,
 }));
 
+app.use("/uploads", express.static("uploads"));
+
 // Rotas de usuários
 app.use(userRouter);
 
