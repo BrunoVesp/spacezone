@@ -1,0 +1,47 @@
+@use '../../styles/variables' as *;
+
+.mobileMenu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: $primaryColor;
+    z-index: 999; // garante que fique acima de tudo
+
+    ul {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            flex-grow: 1;
+
+            a {
+                padding: 16px 0px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                text-decoration: none;
+                color: $textColor;
+                font-size: 14px;
+                font-weight: 600;
+
+                &:hover {
+                    background-color: $buttonHoverColor;
+                    color: $titleColor;
+                }
+            }
+        }
+    }
+}
+
+/* Exibe somente no mobile */
+@media (min-width: $desktopBreakpoint) {
+    .mobileMenu {
+        display: none;
+    }
+}

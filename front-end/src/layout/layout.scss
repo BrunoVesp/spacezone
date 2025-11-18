@@ -1,0 +1,9 @@
+main {
+    padding-bottom: 70px;
+}
+
+@media (min-width: $desktopBreakpoint) {
+    main {
+        padding-bottom: 0;
+    }
+}

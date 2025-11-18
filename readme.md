@@ -1,42 +1,25 @@
-# Etapas para rodar o projeto
+# SpaceZone - Portal de Notícias sobre Astronomia
+
+SpaceZone é um portal de notícias dedicado à astronomia, onde redatores podem publicar posts sobre o universo e usuários podem interagir através de comentários. O projeto foi desenvolvido para facilitar o compartilhamento de informações, curiosidades e descobertas astronômicas, promovendo a troca de conhecimento entre entusiastas e especialistas.
+
+## Requisitos
+
+- [Node.js](https://nodejs.org/) (versão 18 ou superior recomendada)
+- [PostgreSQL](https://www.postgresql.org/) (versão 13 ou superior)
+- [npm](https://www.npmjs.com/) (gerenciador de pacotes do Node.js)
+- (Opcional) [pgAdmin](https://www.pgadmin.org/) para gerenciar o banco de dados
 
 ## 1. Clonar o repositório
+
 ```bash
 git clone https://github.com/BrunoVesp/spacezone.git
 ```
 
-## 2. Criar o arquivo `.env`
+## 2. Configurar o banco de dados
 
-Na raiz da pasta `back-end`, crie um arquivo chamado `.env` com o seguinte conteúdo:
+Instale o **PostgreSQL** e crie um banco chamado `spacezone`. Você pode usar o **pgAdmin** para facilitar a administração.
 
-```env
-PORT="3000"
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/spacezone?schema=public"
-```
-- Arquivo .env atualizado:
-
-```env
-PORT="3000"
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/spacezone?schema=public"
-JWT_SECRET_TOKEN="cbcd1d9c63015f3317eebf577fdcecfcfbfddc65aae62735e99f36eba3a7942a"
-```
-
-Caso seja necessário mudar o JWT_SECRET_TOKEN basta fazer o seguinte comando:
-```
-Caso seja necessário mudar o JWT_SECRET_TOKEN basta fazer o seguinte comando:
-```
-
-## 3. Configurar o banco de dados
-
-Instale o **pgAdmin** e crie um servidor com os seguintes dados:
-
-* **Nome:** spacezone
-* **Hostname:** localhost
-* **Port:** 5432
-* **User:** postgres
-* **Password:** postgres
-
-## 4. Instalar dependências
+## 3. Instalar dependências
 
 Dentro da pasta `back-end`, rode:
 
@@ -44,7 +27,7 @@ Dentro da pasta `back-end`, rode:
 npm install
 ```
 
-## 5. Criar tabelas no banco
+## 4. Criar tabelas no banco
 
 Ainda na pasta `back-end`, rode:
 
@@ -52,10 +35,16 @@ Ainda na pasta `back-end`, rode:
 npx prisma db push
 ```
 
-## 6. Rodar a API
+```bash
+npx prisma generate
+```
+
+## 5. Rodar a API
 
 Na pasta `back-end`, inicie o servidor com:
 
 ```bash
 npm run dev
 ```
+
+---
