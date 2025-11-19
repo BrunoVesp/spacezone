@@ -1,24 +1,24 @@
 import z from "zod";
 
 export const allowedTags = [
-  "POLITICA",
-  "ESPORTES",
-  "ENTRETENIMENTO",
-  "TECNOLOGIA",
-  "ECONOMIA",
-  "MUNDO",
-  "SAUDE",
-  "CULTURA",
-  "CIENCIA",
-  "OPINIAO",
-  "ENTREVISTAS",
-  "REPORTAGENS",
-  "VIDEOS",
-  "FOTOS",
-  "PODCASTS",
-  "EVENTOS",
-  "LIFESTYLE",
-  "VIAGENS"
+  "politica",
+  "esportes",
+  "entretenimento",
+  "tecnologia",
+  "economia",
+  "mundo",
+  "saude",
+  "cultura",
+  "ciencia",
+  "opiniao",
+  "entrevistas",
+  "reportagens",
+  "videos",
+  "fotos",
+  "podcasts",
+  "eventos",
+  "lifestyle",
+  "viagens"
 ] as const;
 
 const normalizeInput = (val: any): string[] => {
@@ -44,7 +44,7 @@ export const tagSchema = z
   .any()
   .transform(normalizeInput)
   .transform(arr =>
-    [...new Set(arr.map(t => t.toUpperCase()))] // uppercase + remover duplicadas
+    [...new Set(arr.map(t => t.toLowerCase()))] // uppercase + remover duplicadas
   )
   .refine(arr => arr.every(t => allowedTags.includes(t as any)), {
     message: "Uma ou mais tags são inválidas.",
@@ -53,49 +53,49 @@ export const tagSchema = z
 export type AllowedTag = typeof allowedTags[number];
 
 export const postCreateSchema = z.object({
-    title: z
+  title: z
     .string()
     .min(1, "O título é obrigatório")
     .max(500, "O título deve ter no máximo 500 caracteres"),
 
-    subtitle: z
+  subtitle: z
     .string()
     .min(1, "O subtítulo é obrigatório")
     .max(500, "O subtítulo deve ter no máximo 500 caracteres"),
 
-    body: z
+  body: z
     .string()
     .min(1, "O corpo do post é obrigatório"),
 
-    tags: tagSchema,
+  tags: tagSchema,
 
-    image: z
+  image: z
     .string()
     .nullable()
     .optional()
 });
 
 export const postUpdateSchema = z.object({
-    title: z
+  title: z
     .string()
     .min(1, "O título é obrigatório")
     .max(500, "O título deve ter no máximo 500 caracteres")
     .optional(),
 
-    subtitle: z
+  subtitle: z
     .string()
     .min(1, "O subtítulo é obrigatório")
     .max(500, "O subtítulo deve ter no máximo 500 caracteres")
     .optional(),
 
-    body: z
+  body: z
     .string()
     .min(1, "O corpo do post é obrigatório")
     .optional(),
 
-    tags: tagSchema.optional(),
+  tags: tagSchema.optional(),
 
-    image: z
+  image: z
     .string()
     .optional()
 });

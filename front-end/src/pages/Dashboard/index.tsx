@@ -100,6 +100,12 @@ const Dashboard = () => {
                             {...register("image")}
                         />
                     </Fieldset>
+                    <Fieldset>
+                        <label htmlFor="tags">Tags</label>
+                        <ul>
+                            {}
+                        </ul>
+                    </Fieldset>
                     {loading && <LoadingSpinner />}
                     <Button disabled={loading}>
                         {loading ? "Publicando..." : "Publicar"}
