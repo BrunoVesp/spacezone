@@ -1,10 +1,9 @@
-import type { Tag } from '../../types/Posts';
 import { formatTimeAgo } from '../../utils/formatTimeAgo';
 import './postCard.scss';
 
 interface PostCardProps {
     image: string;
-    tags: Tag[];
+    tags: string[];
     title: string;
     subtitle: string;
     author: string;

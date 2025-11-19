@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Container from "../../components/Container";
 import './profile.scss';
 import { useToast } from "../../hooks/useToast";
@@ -26,6 +26,8 @@ const Profile = () => {
                 >
                     Sair da Conta
                 </button>
+
+                {user?.isRedator && <Link to="/dashboard">Dashboard</Link>}
             </div>
         </Container>
     );

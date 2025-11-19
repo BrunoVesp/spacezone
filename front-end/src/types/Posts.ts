@@ -1,12 +1,10 @@
-export type Tag = "Galaxias" | "Planetas" | "Estrelas";
-
 export type Posts = {
     id: number;
     image?: string;
     title: string;
     subtitle: string;
     body: string;
-    tags: Tag[];
+    tags?: string[];
     createdAt: string;
     updateAt?: string;
     author?: {

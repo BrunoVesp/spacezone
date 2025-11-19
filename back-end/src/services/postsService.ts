@@ -18,12 +18,13 @@ const PostsService = {
                 image: true,     // Incluindo a imagem
                 author: {
                     select: { nickname: true } // Incluindo o autor
-                    }
+                },
+                tags: true
             },
-                orderBy: { id: "desc" }
-            });
-},
-    
+            orderBy: { id: "desc" }
+        });
+    },
+
     async countPosts(): Promise<number> {
         return prisma.post.count();
     },
@@ -114,16 +115,16 @@ const PostsService = {
         const matchedTags = allowedTags.filter(tag =>
             tag.includes(normalized)
         );
-        
+
         const whereFilter = {
             OR: [
                 { title: { contains: query } },
-                { subtitle: { contains: query}},
+                { subtitle: { contains: query } },
                 { body: { contains: query } },
-                ...matchedTags.map(tag => ({ tags: { has: tag }}))
+                ...matchedTags.map(tag => ({ tags: { has: tag } }))
             ]
         };
-        
+
         const [posts, total] = await prisma.$transaction([
             prisma.post.findMany({
                 where: whereFilter,

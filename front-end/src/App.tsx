@@ -8,6 +8,8 @@ import { ToastProvider } from "./components/Toast/ToastProvider";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdmLogin from "./pages/AdmLogin";
+import Dashboard from "./pages/Dashboard";
+import RedatorRoute from "./routes/RedatorRoute";
 
 function App() {
   return (
@@ -29,7 +31,16 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
+            <Route
+              path="/dashboard"
+              element={
+                <RedatorRoute>
+                  <Dashboard />
+                </RedatorRoute>
+              }
+            />
+
           </Route>
         </Routes>
       </ToastProvider>

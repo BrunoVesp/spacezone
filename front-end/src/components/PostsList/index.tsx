@@ -2,9 +2,9 @@ import './postsList.scss';
 import type { Posts } from '../../types/Posts';
 import { useEffect, useState } from 'react';
 import PostCard from '../PostCard';
-import postImage from '../../assets/images/post.jpg'; //temporário enquanto não tem imagem na api
-import { http } from '../../http/http';
-
+import defaultImage from '../../assets/images/default-placeholder.png';
+import { baseUrl, http } from '../../http/http';
+import type { GetPosts } from '../../types/getPosts';
 interface PostsListProps {
     postsListTitle?: string;
 }
@@ -13,9 +13,9 @@ const PostsList = ({ postsListTitle }: PostsListProps) => {
     const [posts, setPosts] = useState<Posts[]>([]);
 
     async function fetchPosts() {
-        await http<Posts[]>("/posts")
+        await http<GetPosts>("/posts")
             .then(response => {
-                setPosts(response.data);
+                setPosts(response.data.data);
             })
             .catch(error => console.log(error));
     }
@@ -31,9 +31,8 @@ const PostsList = ({ postsListTitle }: PostsListProps) => {
                 {posts.map((post, index) =>
                     <li key={index}>
                         <PostCard
-                            image={postImage}
-                            // aqui está de forma estática por enquanto
-                            tags={["Estrelas"]}
+                            image={post.image ? `${baseUrl}${post.image}` : defaultImage}
+                            tags={post.tags ?? []}
                             title={post.title}
                             subtitle={post.subtitle}
                             author={post.author?.nickname ?? "Usuário deletado"}
