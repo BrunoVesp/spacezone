@@ -110,7 +110,7 @@ const PostsService = {
     },
 
     async searchPosts(query: string, skip: number, take: number) {
-        const normalized = query.trim().toUpperCase();
+        const normalized = query.trim().toLowerCase();
 
         const matchedTags = allowedTags.filter(tag =>
             tag.includes(normalized)
@@ -121,7 +121,7 @@ const PostsService = {
                 { title: { contains: query } },
                 { subtitle: { contains: query } },
                 { body: { contains: query } },
-                ...matchedTags.map(tag => ({ tags: { has: tag } }))
+                ...matchedTags.map(tag => ({ tags: { has: tag.toLowerCase() } }))
             ]
         };
 
