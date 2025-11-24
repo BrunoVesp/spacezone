@@ -8,7 +8,7 @@ const RedatorService = {
       data: { isRedator: true },
     });
   },
-  
+
   async getAllRedatores(skip: number, take: number): Promise<{ total: number; redatores: User[] }> {
     const total = await prisma.user.count({ where: { isRedator: true } });
     

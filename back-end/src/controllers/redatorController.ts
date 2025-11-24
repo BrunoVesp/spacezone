@@ -2,36 +2,48 @@ import { Request, Response } from "express";
 import RedatorService from '../services/redatorService';
 import { idSchema } from "../schemas/idSchema";
 import prisma from "../db/prisma";
+import { promoteSchema } from "../schemas/promoteSchema";
 import { getPagination, buildPaginationLinks} from "../middleware/pagination";
 
 const RedatorController = {
-  async createRedator(req: Request, res: Response): Promise<void> {
-    let id: number;
+  async createRedator(req: Request, res: Response) {
     try {
-      ({ id } = idSchema.parse(req.params));
-    } catch (error: any) {
-      res.status(400).json({
-        message: 'ID inválido',
-        errors: (error.errors ?? error.issues)?.map((e: any) => e.message) ?? [error.message]
+      // valida nickname + email
+      const { email, nickname } = promoteSchema.parse(req.body);
+
+      // quem está tentando promover?
+      const requester = await prisma.user.findUnique({
+        where: { id: req.user.id }
       });
-      return;
-    }
 
-    const redatores = await prisma.user.findMany({
-      where: { isRedator: true }
-    })
+      const redatores = await prisma.user.count({ where: { isRedator: true } });
 
-    const redator = await prisma.user.findUnique({ where: { id: req.user.id } });
-    if (redatores.length > 0 && !redator?.isRedator) {
-      res.status(403).json({ message: 'Apenas redatores podem promover usuários.' });
-      return;
-    }
+      // regra: se já existe redator, só redator pode promover
+      if (redatores > 0 && !requester?.isRedator) {
+        return res.status(403).json({
+          message: "Apenas redatores podem promover usuários."
+        });
+      }
 
-    try {
-      const novoRedator = await RedatorService.createRedator(id);
-      res.status(201).json(novoRedator);
+      // buscar usuário pelo email e nickname
+      const user = await prisma.user.findFirst({
+        where: { email, nickname }
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: "Usuário não encontrado." });
+      }
+
+      // promover
+      const novoRedator = await RedatorService.createRedator(user.id);
+
+      return res.status(201).json(novoRedator);
+
     } catch (error: any) {
-      res.status(400).json({ error: error.message });
+      if (error.errors) {
+        return res.status(400).json({ errors: error.errors });
+      }
+      return res.status(400).json({ message: error.message });
     }
   },
 

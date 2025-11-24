@@ -4,7 +4,7 @@ import { authMiddleware } from "../middleware/webtoken";
 
 const router = Router();
 
-router.put("/redatores/promote/:id", authMiddleware, RedatorController.createRedator);
+router.put("/redatores/promote/", authMiddleware, RedatorController.createRedator);
 
 router.get("/redatores", RedatorController.getAllRedatores);
 
