@@ -206,16 +206,19 @@ const PostsController = {
                 return;
             }
 
-            const { page, limit, skip } = getPagination(req);
+            const post: Post[] = await PostsService.getPostsByUser(userId);
 
-            const [posts, total] = await Promise.all([
-                PostsService.getPostsByUser(userId, skip, limit),
-                PostsService.countPostsByUser(userId)
-            ]);
+            //const { page, limit, skip } = getPagination(req);
 
-            const pagination = buildPaginationLinks(req, page, limit, total);
+            //const [posts, total] = await Promise.all([
+                //PostsService.getPostsByUser(userId, skip, limit),
+                //PostsService.countPostsByUser(userId)
+            //]);
 
-            res.status(200).json({...pagination, data: posts});
+            //onst pagination = buildPaginationLinks(req, page, limit, total);
+
+            //res.status(200).json({...pagination, data: posts});
+            res.status(200).json({ data: post });
 
         } catch (err) {
             res.status(500).json({ error: "Erro ao buscar posts do usuário" });

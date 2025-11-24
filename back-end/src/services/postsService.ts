@@ -59,11 +59,14 @@ const PostsService = {
         });
     },
 
-    async getPostsByUser(userId: number, skip: number, limit: number) {
+    async getPostsByUser(userId: number, 
+        //skip: number, 
+        //limit: number
+    ) {
         return prisma.post.findMany({
             where: { authorId: userId },
-            skip,
-            take: limit,
+            //skip,
+            //take: limit,
             orderBy: { createdAt: "desc" },
             include: {
                 author: { select: { nickname: true } }
