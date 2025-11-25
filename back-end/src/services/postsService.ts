@@ -29,7 +29,10 @@ const PostsService = {
         return prisma.post.count();
     },
 
-    async getPostbyId(id: number, skip: number, take: number): Promise<Post | null> {
+    async getPostbyId(id: number, 
+        //skip: number, 
+        //take: number
+    ): Promise<Post | null> {
         return prisma.post.findUnique({
             where: { id },
             include: {
@@ -37,8 +40,8 @@ const PostsService = {
                     select: { nickname: true }
                 },
                 comentarys: {
-                    skip,
-                    take,
+                    //skip,
+                    //take,
                     orderBy: { createdAt: "desc" },
                     select: {
                         createdAt: true,
@@ -59,14 +62,11 @@ const PostsService = {
         });
     },
 
-    async getPostsByUser(userId: number, 
-        //skip: number, 
-        //limit: number
-    ) {
+    async getPostsByUser(userId: number, skip: number, limit: number) {
         return prisma.post.findMany({
             where: { authorId: userId },
-            //skip,
-            //take: limit,
+            skip,
+            take: limit,
             orderBy: { createdAt: "desc" },
             include: {
                 author: { select: { nickname: true } }

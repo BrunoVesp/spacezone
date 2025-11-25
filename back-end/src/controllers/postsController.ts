@@ -44,13 +44,15 @@ const PostsController = {
         const { page, limit, skip } = getPagination(req);;
 
         try {
-            const post: Post | null = await PostsService.getPostbyId(id, skip, limit);
+            //const post: Post | null = await PostsService.getPostbyId(id, skip, limit);
+            const post: Post | null = await PostsService.getPostbyId(id);
 
-            const total = await PostsService.countCommentsByPost(id);
-            const pagination = buildPaginationLinks(req, page, limit, total);
+            //const total = await PostsService.countCommentsByPost(id);
+            //const pagination = buildPaginationLinks(req, page, limit, total);
 
             if (post) {
-                res.status(200).json({...pagination, data: post});
+                res.status(200).json(post);
+                //res.status(200).json({...pagination, data: post});
             } else {
                 res.status(404).json({ message: 'Post não encontrado' });
             }
@@ -206,19 +208,17 @@ const PostsController = {
                 return;
             }
 
-            const post: Post[] = await PostsService.getPostsByUser(userId);
 
-            //const { page, limit, skip } = getPagination(req);
+            const { page, limit, skip } = getPagination(req);
 
-            //const [posts, total] = await Promise.all([
-                //PostsService.getPostsByUser(userId, skip, limit),
-                //PostsService.countPostsByUser(userId)
-            //]);
+            const [posts, total] = await Promise.all([
+                PostsService.getPostsByUser(userId, skip, limit),
+                PostsService.countPostsByUser(userId)
+            ]);
 
-            //onst pagination = buildPaginationLinks(req, page, limit, total);
+            const pagination = buildPaginationLinks(req, page, limit, total);
 
-            //res.status(200).json({...pagination, data: posts});
-            res.status(200).json({ data: post });
+            res.status(200).json({...pagination, data: posts});
 
         } catch (err) {
             res.status(500).json({ error: "Erro ao buscar posts do usuário" });
