@@ -11,25 +11,46 @@ import { http } from "../../http/http";
 import { useToast } from "../../hooks/useToast";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useState } from "react";
+import { allowedTags } from "../../data/tags";
 
 const Dashboard = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors }
+        formState: { errors },
+        setValue,
+        watch
     } = useForm<NewPostSchema>({
         mode: "all",
         defaultValues: {
             title: "",
             subtitle: "",
             body: "",
-            image: undefined
+            image: undefined,
+            tags: []
         },
         resolver: zodResolver(newPostSchema)
     });
 
     const { addToast } = useToast();
     const [loading, setLoading] = useState(false);
+    const selectedTags = watch("tags") ?? [];
+
+    const toggleTag = (tag: string) => {
+        if (selectedTags.includes(tag)) {
+            setValue(
+                "tags",
+                selectedTags.filter(t => t !== tag),
+                { shouldValidate: true }
+            );
+        } else {
+            setValue(
+                "tags",
+                [...selectedTags, tag],
+                { shouldValidate: true }
+            );
+        }
+    };
 
     const newPost = async (formData: NewPostSchema) => {
         setLoading(true);
@@ -38,13 +59,14 @@ const Dashboard = () => {
         data.append("title", formData.title);
         data.append("subtitle", formData.subtitle);
         data.append("body", formData.body);
+        formData.tags?.forEach(tag => data.append("tags[]", tag));
 
         if (formData.image && formData.image.length > 0) {
             data.append("image", formData.image[0]);
         }
 
         try {
-            await http.post("/posts", data, {
+            await http.post<NewPostSchema>("/posts", data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
@@ -101,10 +123,34 @@ const Dashboard = () => {
                         />
                     </Fieldset>
                     <Fieldset>
-                        <label htmlFor="tags">Tags</label>
-                        <ul>
-                            {}
+                        <label htmlFor="tags">Selecione as Tags</label>
+                        <ul style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                            {allowedTags.map((tag) => {
+                                const isSelected = selectedTags.includes(tag);
+
+                                return (
+                                    <li
+                                        key={tag}
+                                        onClick={() => toggleTag(tag)}
+                                        style={{
+                                            padding: "6px 12px",
+                                            borderRadius: "4px",
+                                            cursor: "pointer",
+                                            border: "1px solid white",
+                                            background: isSelected ? "#4caf50" : "transparent",
+                                            color: "white",
+                                            userSelect: "none"
+                                        }}
+                                    >
+                                        {tag}
+                                    </li>
+                                );
+                            })}
                         </ul>
+
+                        {errors.tags && (
+                            <ErrorMessage>{errors.tags.message}</ErrorMessage>
+                        )}
                     </Fieldset>
                     {loading && <LoadingSpinner />}
                     <Button disabled={loading}>

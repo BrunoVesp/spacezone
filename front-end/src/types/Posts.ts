@@ -1,3 +1,5 @@
+import type { Comentary } from "./Comentary";
+
 export type Posts = {
     id: number;
     image?: string;
@@ -7,6 +9,7 @@ export type Posts = {
     tags?: string[];
     createdAt: string;
     updateAt?: string;
+    comentarys: Comentary[];
     author?: {
         nickname: string;
     } | null

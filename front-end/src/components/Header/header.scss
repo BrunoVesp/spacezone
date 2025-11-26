@@ -2,7 +2,11 @@
 
 .header {
     width: 100%;
+    top: 0;
+    left: 0;
     background-color: $primaryColor;
+    border-bottom: 1px solid $borderColor;
+    z-index: 2;
 
     .headerContainer {
         display: flex;
@@ -23,6 +27,8 @@
 
     /* Ajustes para desktop */
     @media (min-width: $desktopBreakpoint) {
+        position: fixed;
+
         .headerContainer {
             flex-direction: row;
             padding: 24px 0px;

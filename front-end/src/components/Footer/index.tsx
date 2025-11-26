@@ -7,7 +7,7 @@ const Footer = () => {
             <Container>
                 <div className="footerInfos">
                     <p>
-                        &copy; 2025 SpaceZone. Todo os direitos reservados.
+                        &copy; 2025 SpaceZone. Todos os direitos reservados.
                     </p>
                 </div>
             </Container>

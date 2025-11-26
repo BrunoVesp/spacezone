@@ -1,4 +1,5 @@
 import z from "zod";
+import { allowedTags } from "../data/tags";
 
 export const newPostSchema = z.object({
     title: z
@@ -10,7 +11,10 @@ export const newPostSchema = z.object({
     body: z
         .string()
         .min(1, "O Corpo é obrigatório"),
-    image: z.any().optional(),
+    image: z
+        .any()
+        .optional(),
+    tags: z.array(z.enum(allowedTags)).optional()
 })
 
 export type NewPostSchema = z.infer<typeof newPostSchema>

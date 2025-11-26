@@ -61,8 +61,7 @@ const UserController = {
     async createUser(req: Request, res: Response): Promise<void> {
         try {
             const data = createUserSchema.parse(req.body);
-            if (req.file)
-            {
+            if (req.file) {
                 data.profileImage = `/uploads/${req.file.filename}`;
             }
             const salt: string = await bcrypt.genSalt();
@@ -74,7 +73,7 @@ const UserController = {
             if (req.file) {
                 deleteFile(req.file.filename);
             }
-            
+
             if (error instanceof ZodError) {
                 res.status(400).json({
                     errors: error.issues.map(e => e.message)
@@ -105,7 +104,7 @@ const UserController = {
 
         let dataUpdate: UserDataUpdateType;
         try {
-            
+
             const existingUser = await UserService.getUserById(id);
             if (!existingUser) {
                 res.status(404).json({ message: "Usuário não encontrado." });
@@ -114,11 +113,12 @@ const UserController = {
 
             dataUpdate = updateUserSchema.parse(req.body);
 
-            if (req.file)
-            {
+            if (req.file) {
                 if (existingUser.profileImage) {
-                    deleteFile(existingUser.profileImage);
+                    const oldFile = existingUser.profileImage.replace("/uploads/", "");
+                    deleteFile(oldFile);
                 }
+
                 dataUpdate.profileImage = `/uploads/${req.file.filename}`;
             }
 

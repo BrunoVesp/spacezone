@@ -10,6 +10,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import AdmLogin from "./pages/AdmLogin";
 import Dashboard from "./pages/Dashboard";
 import RedatorRoute from "./routes/RedatorRoute";
+import Post from "./pages/Post";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/posts" element={<Posts />} />
+            <Route path="/posts/:id" element={<Post />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/adm-login" element={<AdmLogin />} />

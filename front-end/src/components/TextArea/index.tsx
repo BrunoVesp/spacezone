@@ -1,10 +1,17 @@
 import type { TextareaHTMLAttributes } from 'react';
 import './textArea.scss';
 
-type TextAreaProps = TextareaHTMLAttributes<HTMLTextAreaElement>;
+interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+    maxHeight?: number;
+}
 
-const TextArea = (props: TextAreaProps) => {
-    return <textarea autoComplete='off' className="textArea" {...props} />;
+const TextArea = ({ maxHeight, ...rest }: TextAreaProps) => {
+    return <textarea
+        {...rest}
+        style={{ maxHeight: `${maxHeight}px` }}
+        autoComplete='off'
+        className="textArea"
+    />;
 };
 
 export default TextArea;
