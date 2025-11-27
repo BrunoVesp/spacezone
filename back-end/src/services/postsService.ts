@@ -29,7 +29,7 @@ const PostsService = {
         return prisma.post.count();
     },
 
-    async getPostbyId(id: number, 
+    async getPostbyId(id: number,
         //skip: number, 
         //take: number
     ): Promise<Post | null> {
@@ -48,7 +48,11 @@ const PostsService = {
                         isUpdated: true,
                         content: true,
                         user: {
-                            select: { nickname: true }
+                            select: {
+                                id: true,
+                                nickname: true,
+                                profileImage: true
+                            }
                         }
                     }
                 }

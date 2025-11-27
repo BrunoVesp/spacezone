@@ -12,8 +12,8 @@
 
     figure {
         align-self: flex-start;
-        width: 40px;
-        height: 40px;
+        max-width: 40px;
+        max-height: 40px;
         border-radius: 50%;
         overflow: hidden;
         border: 2px solid $borderColor;
@@ -36,12 +36,11 @@
             .name {
                 display: flex;
                 align-items: center;
-                gap: 16px;
+                gap: 8px;
 
                 span {
-                    font-size: 14px;
+                    font-size: 12px;
                     color: $textColor;
-
                 }
             }
         }
@@ -53,7 +52,41 @@
         }
     }
 
+    .menuOptions {
+        align-self: flex-start;
+        position: relative;
 
+        .menuButton {
+            background: transparent;
+            border: none;
+            font-size: 22px;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+        }
 
+        .menuDropdown {
+            position: absolute;
+            right: 0;
+            top: 30px;
+            background: #1d1d1d;
+            border: 1px solid #333;
+            border-radius: 6px;
+            list-style: none;
+            padding: 5px 0;
+            width: 120px;
+            z-index: 10;
 
+            li {
+                padding: 8px 12px;
+                cursor: pointer;
+                transition: 0.2s;
+                color: white;
+
+                &:hover {
+                    background: #333;
+                }
+            }
+        }
+    }
 }

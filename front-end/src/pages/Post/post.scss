@@ -141,4 +141,17 @@
             gap: 24px;
         }
     }
+
+    .commentEditModal {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .modalButtons {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+    }
 }

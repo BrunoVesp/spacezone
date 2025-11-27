@@ -1,10 +1,11 @@
-export type Comentary = {
+export type ComentaryType = {
     id: number;
     content: string;
     createdAt: string;
     isUpdated: boolean;
-    userImage: string;
     user: {
+        id: number;
         nickname: string;
+        profileImage: string;
     }
 }
