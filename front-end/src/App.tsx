@@ -11,6 +11,7 @@ import AdmLogin from "./pages/AdmLogin";
 import Dashboard from "./pages/Dashboard";
 import RedatorRoute from "./routes/RedatorRoute";
 import Post from "./pages/Post";
+import AboutUs from "./pages/AboutUs";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/posts" element={<Posts />} />
             <Route path="/posts/:id" element={<Post />} />
+            <Route path="/sobre-nos" element={<AboutUs />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/adm-login" element={<AdmLogin />} />
