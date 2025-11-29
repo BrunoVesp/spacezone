@@ -55,11 +55,11 @@ const Comentary = ({
                     <div className='name'>
                         <h4>@{nickname}</h4>
                         <span>{formatTimeAgo(createdAt)}</span>
+                        {isUpdate && <span>(Editado)</span>}
                     </div>
                 </div>
 
                 <p className='content'>{content}</p>
-                {isUpdate && <span className='isUpdate'>(Editado)</span>}
             </div>
 
             {isOwner && (

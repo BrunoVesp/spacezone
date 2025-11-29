@@ -4,7 +4,7 @@ import { idSchema } from "../schemas/idSchema";
 import { commentSchema } from "../schemas/commentSchema";
 import { commentType } from "../types/commentType";
 import { ZodError } from "zod";
-import { getPagination, buildPaginationLinks} from "../middleware/pagination";
+import { getPagination, buildPaginationLinks } from "../middleware/pagination";
 
 const ComentaryController = {
     async getAll(req: Request, res: Response) {
@@ -51,6 +51,11 @@ const ComentaryController = {
     async update(req: Request, res: Response) {
         try {
             const id = Number(req.params.id);
+
+            if (Number.isNaN(id) || id <= 0) {
+                return res.status(400).json({ error: "ID inválido" });
+            }
+
             const { content } = req.body;
 
             // Busca o comentário para verificar o autor
@@ -65,7 +70,8 @@ const ComentaryController = {
             const updatedComentary = await ComentaryService.updateComentary(id, { content });
             res.json(updatedComentary);
         } catch (err) {
-            res.status(500).json({ error: "Erro ao atualizar comentário" });
+            console.error(err);
+            return res.status(500).json({ error: "Erro ao atualizar comentário", details: err });
         }
     },
 
@@ -108,7 +114,7 @@ const ComentaryController = {
     async getByUser(req: Request, res: Response) {
         try {
             const userId = Number(req.params.userId);
-            
+
             if (!req.user || req.user.id !== userId) {
                 return res.status(403).json({ error: "Acesso negado" });
             }

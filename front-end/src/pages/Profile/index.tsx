@@ -63,7 +63,7 @@ const Profile = () => {
             setPreview(null);
             setFile(null);
 
-            // 🔥 reload suave após salvar
+            // reload suave após salvar
             setTimeout(() => {
                 window.location.reload();
             }, 800);

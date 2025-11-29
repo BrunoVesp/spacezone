@@ -12,6 +12,8 @@
 }
 
 .modalContent {
+    overflow-y: auto;
+    max-height: 90vh;
     min-width: 320px;
     color: $titleColor;
     background: $primaryColor;
@@ -21,6 +23,29 @@
     max-width: 90%;
     min-width: 320px;
     animation: pop 0.2s ease;
+
+    .modalHeader {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        .modalCloseButton {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 24px;
+            color: $titleColor;
+            cursor: pointer;
+        }
+    }
+
+
+}
+
+@media (min-width: $desktopBreakpoint) {
+    .modalContent {
+        min-width: 800px;
+    }
 }
 
 @keyframes fadeIn {

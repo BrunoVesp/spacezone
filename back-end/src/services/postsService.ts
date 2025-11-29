@@ -44,6 +44,7 @@ const PostsService = {
                     //take,
                     orderBy: { createdAt: "desc" },
                     select: {
+                        id: true,
                         createdAt: true,
                         isUpdated: true,
                         content: true,

@@ -15,7 +15,7 @@ router.post("/comments/:postId", authMiddleware, ComentaryController.create);
 router.put("/comments/:id", authMiddleware, ComentaryController.update);
 
 
-router.delete("/comments/:id", authMiddleware, ComentaryController.delete);
+router.delete("/comments/:id", authMiddleware, ComentaryController.delete); 
 
 
 router.get("/comments/post/:postId", ComentaryController.getByPost);
