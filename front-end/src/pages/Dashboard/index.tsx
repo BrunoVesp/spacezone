@@ -12,6 +12,7 @@ import { useToast } from "../../hooks/useToast";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import { useState } from "react";
 import { allowedTags } from "../../data/tags";
+import './dashboard.scss';
 
 const Dashboard = () => {
     const {
@@ -82,7 +83,7 @@ const Dashboard = () => {
 
     return (
         <Container>
-            <div>
+            <div className="dashboard">
                 <h1 style={{ color: 'white' }}>Dashboard</h1>
 
                 <h2 style={{ color: 'white' }}>Novo post</h2>

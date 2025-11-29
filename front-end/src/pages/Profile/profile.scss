@@ -26,6 +26,12 @@
         }
     }
 
+    .dashboardLink {
+        button {
+            width: 100%;
+        }
+    }
+
     .fileInputContainer {
         display: flex;
         flex-direction: column;
@@ -34,6 +40,54 @@
 
         button {
             align-self: flex-end;
+        }
+    }
+
+    .logout {
+        background-color: #EF4444;
+        align-self: flex-end;
+        width: 100%;
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $titleColor;
+        cursor: pointer;
+    }
+
+    .edit {
+        background-color: rgb(28, 28, 211);
+        width: fit-content;
+        border: none;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: $titleColor;
+        cursor: pointer;
+    }
+
+    .fileInputContainer {
+        margin: 16px 0px;
+
+        .actions {
+            display: flex;
+            gap: 16px;
+            justify-content: flex-end;
+        }
+    }
+}
+
+@media (min-width: $desktopBreakpoint) {
+    .profile {
+        .logout,
+        .dashboardLink button {
+            width: fit-content;
         }
     }
 }

@@ -7,11 +7,11 @@ import Register from "./pages/Register";
 import { ToastProvider } from "./components/Toast/ToastProvider";
 import Profile from "./pages/Profile";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AdmLogin from "./pages/AdmLogin";
 import Dashboard from "./pages/Dashboard";
 import RedatorRoute from "./routes/RedatorRoute";
 import Post from "./pages/Post";
 import AboutUs from "./pages/AboutUs";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
             <Route path="/sobre-nos" element={<AboutUs />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/adm-login" element={<AdmLogin />} />
+            <Route path="*" element={<NotFound />} />
 
             <Route
               path="/perfil"
