@@ -1,8 +1,8 @@
-@import '../../styles/_variables.scss';
+@use '../../styles/variables' as *;
 
 .notFound-page {
     min-height: calc(100vh - 182px);
-    background: $secundaryColor;
+    background-color: $secundaryColor;
     display: flex;
     align-items: center;
     justify-content: center;

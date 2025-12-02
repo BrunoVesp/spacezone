@@ -1,3 +1,72 @@
+@use '../../styles/variables' as *;
+
+.dashboardTitle {
+    color: $titleColor;
+    margin: 32px 0px;
+}
+
 .dashboard {
     margin: 32px 0px;
+    display: flex;
+    flex-direction: column;
+
+    h1 {
+        color: $titleColor;
+        margin-bottom: 16px;
+    }
+
+    .newPostForm {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        h2 {
+            color: $titleColor;
+        }
+    }
+
+    .redator {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        margin: 32px 0px;
+
+        .promoteRedator {
+            h2 {
+                color: $titleColor;
+                margin: 8px 0px;
+            }
+
+            .promoteRedatorForm {
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+
+        .demoteRedator {
+            color: $titleColor;
+            form {
+                button {
+                    margin: 16px 0px;
+                    background-color: #c0392b;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: $desktopBreakpoint) {
+    .newPostAndRedator {
+        display: flex;
+        align-items: flex-start;
+        gap: 32px;
+
+        .newPostForm,
+        .redator {
+            flex-grow: 1;
+            width: 100%;
+            margin: 0px;
+        }
+    }
 }
