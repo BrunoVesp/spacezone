@@ -58,5 +58,4 @@ npm install
 npm run dev
 ```
 
-O front-end será iniciado em ambiente de desenvolvimento e poderá ser acessado pelo navegador no endereço indicado pelo terminal (geralmente `http://localhost:5173` ou similar).
-```
+O front-end será iniciado em ambiente de desenvolvimento e poderá ser acessado pelo navegador no endereço `http://localhost:5173`.
