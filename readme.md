@@ -19,7 +19,7 @@ git clone https://github.com/BrunoVesp/spacezone.git
 
 Instale o **PostgreSQL** e crie um banco chamado `spacezone`. Você pode usar o **pgAdmin** para facilitar a administração.
 
-## 3. Instalar dependências
+## 3. Instalar dependências do back-end
 
 Dentro da pasta `back-end`, rode:
 
@@ -48,3 +48,15 @@ npm run dev
 ```
 
 ---
+
+## 6. Rodar o Front-end
+
+Para iniciar o front-end, acesse a pasta `front-end` e rode os seguintes comandos:
+
+```bash
+npm install
+npm run dev
+```
+
+O front-end será iniciado em ambiente de desenvolvimento e poderá ser acessado pelo navegador no endereço indicado pelo terminal (geralmente `http://localhost:5173` ou similar).
+```
