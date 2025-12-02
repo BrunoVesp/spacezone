@@ -34,9 +34,9 @@ const Register = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    const onSubmitRegister = (formData: RegisterSchema) => {
+    async function onSubmitRegister(formData: RegisterSchema) {
         setLoading(true);
-        http.post("/users", formData)
+        await http.post("/users", formData)
             .then(() => {
                 addToast("Conta criada com sucesso!", "success");
 

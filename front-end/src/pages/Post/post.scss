@@ -1,0 +1,198 @@
+@use '../../styles/variables' as *;
+
+.notFoundPostTitle {
+    text-align: center;
+    color: $titleColor;
+    font-size: 32px;
+}
+
+.postPage {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 32px 0px 108px 0px;
+
+    .redatorOptions {
+        margin-top: 16px;
+        align-self: flex-end;
+        display: flex;
+        gap: 8px;
+        z-index: 1;
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 6px;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: $titleColor;
+            cursor: pointer;
+        }
+
+        .edit {
+            background-color: rgb(28, 28, 211);
+        }
+
+        .delete {
+            background-color: #EF4444;
+        }
+    }
+
+    header {
+        color: $titleColor;
+        text-transform: capitalize;
+
+        h1 {
+            font-size: 32px;
+            margin: 12px 0px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+    }
+
+    .infos {
+        color: $textColor;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 32px;
+
+        span {
+            font-size: 14px;
+        }
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        figure {
+            img {
+                width: 100%;
+                border-radius: 8px;
+            }
+        }
+
+        .body {
+            color: $textColor;
+            font-size: 14px;
+        }
+
+        .tagsContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 18px 0px;
+
+            h3 {
+                font-size: 18px;
+                color: $titleColor;
+            }
+
+            ul {
+                display: flex;
+                gap: 8px;
+
+                li {
+                    font-size: 12px;
+                    padding: 12px;
+                    color: $titleColor;
+                    border-radius: 8px;
+                    border: 1px solid $borderColor;
+                }
+            }
+        }
+    }
+
+    .newComment {
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            button {
+                align-self: flex-end;
+            }
+        }
+    }
+
+    .comments {
+        margin: 16px 0px;
+
+        h3 {
+            color: $titleColor;
+            margin: 16px 0px;
+        }
+
+        .noComments {
+            color: $titleColor;
+            text-align: center;
+            margin: 16px 0px;
+        }
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+    }
+
+    .commentEditModal {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .modalButtons {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+    }
+
+    .deleteModal {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        .smallText {
+            font-size: 14px;
+            color: $textColor;
+        }
+
+        .modalButtons {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+    }
+
+    .editPostModal {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        figure {
+            max-width: 800px;
+
+            img {
+                width: 100%;
+                border-radius: 8px;
+                object-fit: contain;
+            }
+        }
+
+        .modalButtons {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 16px;
+        }
+    }
+}

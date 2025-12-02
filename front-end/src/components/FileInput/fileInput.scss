@@ -1,0 +1,26 @@
+@use '../../styles/variables' as *;
+
+.fileInput {
+    max-width: 200px;
+
+    .fileButton {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        background: $primaryColor;
+        color: $titleColor;
+        border: 1px solid $borderColor;
+        padding: .8rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: .2s;
+
+        svg {
+            font-size: 18px;
+        }
+
+        &:hover {
+            background: #3a3d4d;
+        }
+    }
+}

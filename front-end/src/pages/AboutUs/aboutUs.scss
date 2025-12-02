@@ -1,0 +1,43 @@
+@use '../../styles/variables' as *;
+
+.aboutUs {
+    margin: 32px 0px;
+
+    h1 {
+        color: $titleColor;
+        margin: 8px 0px;
+        margin-bottom: 1rem;
+    }
+
+    .loading,
+    .error {
+        margin: 0.5rem 0;
+        color: #666;
+    }
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+
+        li {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: $textColor;
+
+            img {
+                width: 64px;
+                height: 64px;
+                border: 1px solid $borderColor;
+                border-radius: 50%;
+            }
+
+            a {
+                color: $textColor;
+                text-decoration: underline;
+            }
+        }
+    }
+}

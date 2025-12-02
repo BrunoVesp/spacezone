@@ -1,4 +1,4 @@
-export type Tag = "Galaxias" | "Planetas" | "Estrelas";
+import type { ComentaryType } from "./Comentary";
 
 export type Posts = {
     id: number;
@@ -6,9 +6,10 @@ export type Posts = {
     title: string;
     subtitle: string;
     body: string;
-    tags: Tag[];
+    tags?: string[];
     createdAt: string;
     updateAt?: string;
+    comentarys: ComentaryType[];
     author?: {
         nickname: string;
     } | null

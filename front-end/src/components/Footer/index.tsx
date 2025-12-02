@@ -1,10 +1,15 @@
 import Container from "../Container";
+import './footer.scss';
 
 const Footer = () => {
     return (
-        <footer>
+        <footer className="footer">
             <Container>
-                footer
+                <div className="footerInfos">
+                    <p>
+                        &copy; 2025 SpaceZone. Todos os direitos reservados.
+                    </p>
+                </div>
             </Container>
         </footer>
     );

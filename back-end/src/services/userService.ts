@@ -4,8 +4,15 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const UserService = {
-    async getAllUsers(): Promise<User[]> {
-        return prisma.user.findMany();
+    async getAllUsers(skip: number, take: number): Promise<{ total: number; users: User[] }> {
+        const total = await prisma.user.count();
+
+        const users = await prisma.user.findMany({
+            skip,
+            take
+        });
+
+        return { total, users };
     },
     
     async getUserById(id: number): Promise<User | null> {
@@ -33,10 +40,43 @@ const UserService = {
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if(!isPasswordValid) return null;
 
-        const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET_TOKEN as string, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_TOKEN as string, { expiresIn: '24h' });
 
         return { user, token };
+    },
+
+    async searchUsers(query: string, skip: number, take: number) {
+        const [users, total] = await prisma.$transaction([
+            prisma.user.findMany({
+                where: {
+                    OR: [
+                        { nickname: { contains: query, mode: "insensitive" } },
+                        { email: { contains: query, mode: "insensitive" } }
+                    ]
+                },
+                skip,
+                take,
+                orderBy: { nickname: "asc" },
+                select: {
+                    id: true,
+                    nickname: true,
+                    email: true,
+                    profileImage: true
+                }
+            }),
+            prisma.user.count({
+                where: {
+                    OR: [
+                        { nickname: { contains: query, mode: "insensitive" } },
+                        { email: { contains: query, mode: "insensitive" } }
+                    ]
+                }
+            })
+        ]);
+
+        return { users, total };
     }
+
 };
 
 export default UserService;

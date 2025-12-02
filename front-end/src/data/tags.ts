@@ -1,0 +1,20 @@
+export const allowedTags = [
+  "politica",
+  "esportes",
+  "entretenimento",
+  "tecnologia",
+  "economia",
+  "mundo",
+  "saude",
+  "cultura",
+  "ciencia",
+  "opiniao",
+  "entrevistas",
+  "reportagens",
+  "videos",
+  "fotos",
+  "podcasts",
+  "eventos",
+  "lifestyle",
+  "viagens"
+]

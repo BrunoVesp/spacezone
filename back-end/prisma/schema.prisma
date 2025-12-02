@@ -27,11 +27,12 @@ model Post {
   subtitle   String
   body       String
   authorId   Int?
-  createdAt  DateTime    @default(now())
-  updateAt   DateTime?    @updatedAt
   author     User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
   comentarys Comentary[]
   image      String?
+  createdAt DateTime    @default(now())
+  updateAt  DateTime    @updatedAt
+  tags       String[]
 }
 
 model Comentary {
@@ -45,3 +46,4 @@ model Comentary {
   Post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int?
 }
+

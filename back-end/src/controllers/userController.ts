@@ -6,12 +6,24 @@ import { UserDataUpdateType } from '../types/userDataCreate';
 import { createUserSchema, loginUserSchema, updateUserSchema } from '../schemas/userSchema';
 import { idSchema } from '../schemas/idSchema';
 import { deleteFile } from '../middleware/deletefile';
+import { ZodError } from 'zod';
+import { getPagination, buildPaginationLinks } from "../middleware/pagination";
 
 const UserController = {
     async getAllUsers(req: Request, res: Response): Promise<void> {
         try {
-            const users: User[] = await UserService.getAllUsers();
-            res.status(200).json(users);
+            const { page, limit, skip } = getPagination(req);
+
+            const { total, users }: { total: number; users: User[] } = await UserService.getAllUsers(skip, limit);
+
+            const pagination = buildPaginationLinks(req, page, limit, total);
+
+
+            res.status(200).json({
+                pagination,
+                data: users
+            });
+
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
         }
@@ -47,11 +59,9 @@ const UserController = {
     },
 
     async createUser(req: Request, res: Response): Promise<void> {
-        const data = createUserSchema.parse(req.body)
-
         try {
-            if (req.file)
-            {
+            const data = createUserSchema.parse(req.body);
+            if (req.file) {
                 data.profileImage = `/uploads/${req.file.filename}`;
             }
             const salt: string = await bcrypt.genSalt();
@@ -59,8 +69,19 @@ const UserController = {
             data.password = hashedPassword;
             const newUser: User = await UserService.createUser(data);
             res.status(201).json(newUser);
-        } catch (error) {
-            res.status(500).json({ message: 'Internal server error' });
+        } catch (error: any) {
+            if (req.file) {
+                deleteFile(req.file.filename);
+            }
+
+            if (error instanceof ZodError) {
+                res.status(400).json({
+                    errors: error.issues.map(e => e.message)
+                });
+            } else {
+                const errorMessage = error instanceof Error ? error.message : 'Erro ao criar usuário';
+                res.status(500).json({ message: errorMessage });
+            }
         }
     },
 
@@ -83,6 +104,7 @@ const UserController = {
 
         let dataUpdate: UserDataUpdateType;
         try {
+
             const existingUser = await UserService.getUserById(id);
             if (!existingUser) {
                 res.status(404).json({ message: "Usuário não encontrado." });
@@ -91,11 +113,12 @@ const UserController = {
 
             dataUpdate = updateUserSchema.parse(req.body);
 
-            if (req.file)
-            {
+            if (req.file) {
                 if (existingUser.profileImage) {
-                    deleteFile(existingUser.profileImage);
+                    const oldFile = existingUser.profileImage.replace("/uploads/", "");
+                    deleteFile(oldFile);
                 }
+
                 dataUpdate.profileImage = `/uploads/${req.file.filename}`;
             }
 
@@ -105,6 +128,11 @@ const UserController = {
                 dataUpdate.password = hashedPassword;
             }
         } catch (error: any) {
+
+            if (req.file) {
+                deleteFile(req.file.filename);
+            }
+
             res.status(400).json({
                 message: 'Dados inválidos',
                 errors: (error.errors ?? error.issues)?.map((e: any) => e.message) ?? [error.message]
@@ -178,7 +206,32 @@ const UserController = {
         } catch (error) {
             res.status(500).json({ message: 'Internal server error' });
         }
+    },
+
+    async search(req: Request, res: Response) {
+        try {
+            const query = (req.query.query as string) || "";
+
+            if (!query.trim()) {
+                return res.status(400).json({ error: "Query de pesquisa obrigatória." });
+            }
+
+            const { page, limit, skip } = getPagination(req);
+
+            const { users, total } = await UserService.searchUsers(query, skip, limit);
+
+            const pagination = buildPaginationLinks(req, page, limit, total);
+
+            res.json({
+                ...pagination,
+                data: users
+            });
+
+        } catch (error) {
+            res.status(500).json({ error: "Erro ao pesquisar usuários." });
+        }
     }
+
 
 }
 

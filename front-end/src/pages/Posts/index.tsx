@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
+import Container from "../../components/Container";
+import PostsList from "../../components/PostsList";
 
 const Posts = () => {
     return (
-        <div>
-            <p>posts</p>
-            <Link to="/">Voltar para home</Link>
-        </div>
+        <Container>
+            <PostsList postsListTitle="Últimas Atualizações" />
+        </Container>
     );
 }
 

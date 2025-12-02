@@ -1,0 +1,14 @@
+@use '../../styles/variables' as *;
+
+.textArea {
+    resize: none;
+    outline: none;
+    border-radius: 8px;
+    border: 1px solid $borderColor;
+    color: $titleColor;
+    background-color: transparent;
+    padding: 10px 18px;
+    height: 300px;
+    width: 100%;
+    font-size: 16px;
+}

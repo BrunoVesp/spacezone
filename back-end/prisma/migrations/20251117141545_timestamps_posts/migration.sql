@@ -1,0 +1,1 @@
+-- Empty migration (columns already created in previous migration)

@@ -9,15 +9,17 @@ const RedatorService = {
     });
   },
 
-  async getAllRedatores(): Promise<User[]> {
-    return prisma.user.findMany({
-      include: {
-        Post: true,
-        Comentary: true
-      },
-      where: { isRedator: true }
+  async getAllRedatores(skip: number, take: number): Promise<{ total: number; redatores: User[] }> {
+    const total = await prisma.user.count({ where: { isRedator: true } });
+    
+    const redatores = await prisma.user.findMany({
+      where: { isRedator: true },
+      skip,
+      take
     });
-  },
+    
+    return { total, redatores };
+},
 
   async demoteRedator(id: number): Promise<User> {
     return prisma.user.update({

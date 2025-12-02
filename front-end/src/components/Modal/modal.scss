@@ -1,0 +1,71 @@
+@use '../../styles/variables' as *;
+
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9990;
+    animation: fadeIn 0.2s ease;
+}
+
+.modalContent {
+    overflow-y: auto;
+    max-height: 90vh;
+    min-width: 320px;
+    color: $titleColor;
+    background: $primaryColor;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid $borderColor;
+    max-width: 90%;
+    min-width: 320px;
+    animation: pop 0.2s ease;
+
+    .modalHeader {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+
+        .modalCloseButton {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 24px;
+            color: $titleColor;
+            cursor: pointer;
+        }
+    }
+
+
+}
+
+@media (min-width: $desktopBreakpoint) {
+    .modalContent {
+        min-width: 800px;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes pop {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

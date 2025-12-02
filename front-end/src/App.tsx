@@ -5,6 +5,13 @@ import Posts from "./pages/Posts";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { ToastProvider } from "./components/Toast/ToastProvider";
+import Profile from "./pages/Profile";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import Dashboard from "./pages/Dashboard";
+import RedatorRoute from "./routes/RedatorRoute";
+import Post from "./pages/Post";
+import AboutUs from "./pages/AboutUs";
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -14,8 +21,30 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/posts" element={<Posts />} />
+            <Route path="/posts/:id" element={<Post />} />
+            <Route path="/sobre-nos" element={<AboutUs />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
+
+            <Route
+              path="/perfil"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/dashboard"
+              element={
+                <RedatorRoute>
+                  <Dashboard />
+                </RedatorRoute>
+              }
+            />
+
           </Route>
         </Routes>
       </ToastProvider>
