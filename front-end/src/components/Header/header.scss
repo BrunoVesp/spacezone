@@ -1,0 +1,73 @@
+@use '../../styles/variables' as *;
+
+.header {
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: $primaryColor;
+    border-bottom: 1px solid $borderColor;
+    z-index: 2;
+
+    .headerContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        justify-content: space-between;
+        padding: 32px 16px 16px 16px;
+
+        .search {
+            width: 100%;
+        }
+
+        .nav-header {
+            display: none;
+        }
+    }
+
+    /* Ajustes para desktop */
+    @media (min-width: $desktopBreakpoint) {
+        position: fixed;
+
+        .headerContainer {
+            flex-direction: row;
+            padding: 24px 0px;
+            gap: 48px;
+
+            .nav-header {
+                display: block;
+                width: 100%;
+
+                ul {
+                    display: flex;
+                    justify-content: center;
+                    gap: 24px;
+                    width: 100%;
+
+                    li {
+                        width: 100%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        a {
+                            display: block;
+                            text-align: center;
+                            width: 100%;
+                            color: $textColor;
+                            font-weight: 600;
+                            padding: 12px;
+                            border-radius: 8px;
+                            transition: 0.4s;
+
+                            &:hover {
+                                background-color: $buttonHoverColor;
+                                color: $titleColor;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

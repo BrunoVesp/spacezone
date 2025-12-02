@@ -1,0 +1,93 @@
+@use '../../styles/variables' as *;
+
+.postCard {
+    background-color: $secundaryColor;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-radius: 8px;
+    border: 1px solid $borderColor;
+    padding: 16px;
+    cursor: pointer;
+    transition: .4s;
+
+    &:hover {
+        border-color: $titleColor;
+    }
+
+    .ImageContainer {
+        img {
+            border-radius: 8px;
+            width: 100%;
+        }
+    }
+
+    .infos {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 8px;
+
+        .textContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+
+            .tags {
+                ul {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    gap: 8px;
+
+                    li {
+                        background-color: $tagColor;
+                        border-radius: 24px;
+                        width: fit-content;
+                        padding: 10px;
+                        color: $titleColor;
+                        font-size: 12px;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .title {
+                color: $titleColor;
+                font-size: 18px;
+            }
+
+            .subtitle {
+                color: $textColor;
+                font-weight: 500;
+                font-size: 16px;
+            }
+        }
+
+        .dateAndAuthor {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+
+            p {
+                color: $textColor;
+                font-size: 14px;
+            }
+        }
+    }
+}
+
+@media (min-width: $desktopBreakpoint) {
+    .postCard {
+        flex-direction: row;
+        gap: 16px;
+
+        .ImageContainer {
+            width: 20%;
+        }
+
+        .infos {
+            width: 80%;
+        }
+    }
+}

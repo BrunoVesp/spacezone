@@ -1,0 +1,11 @@
+@use '../../styles/variables' as *;
+
+.fieldset {
+    outline: none;
+    border: none;
+    color: $titleColor;
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

@@ -1,0 +1,94 @@
+@use '../../styles/variables' as *;
+
+.postsList {
+    background-color: $secundaryColor;
+    border-radius: 8px;
+    margin: 32px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+
+        .postsListTitle {
+            font-size: 20px;
+            color: $titleColor;
+            font-weight: 700;
+        }
+
+        .filterContainer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            .filterLabel {
+                color: $titleColor;
+                font-weight: 600;
+                font-size: 14px;
+            }
+
+            .filterSelect {
+                background-color: transparent;
+                color: $titleColor;
+                outline: none;
+                border: 1px solid $borderColor;
+                border-radius: 8px;
+                padding: 12px;
+                font-size: 14px;
+                cursor: pointer;
+
+                option {
+                    background-color: $primaryColor;
+                    font-size: 14px;
+                }
+
+                &:hover {
+                    border-color: $titleColor;
+                }
+            }
+        }
+    }
+
+    .list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .emptyPosts {
+        font-size: 18px;
+        text-align: center;
+        color: $titleColor;
+        font-size: 700;
+    }
+
+    footer {
+        display: flex;
+        justify-content: center;
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+
+            span {
+                color: $titleColor;
+                font-weight: 600;
+
+            }
+        }
+    }
+}
+
+@media (min-width: $desktopBreakpoint) {
+    .postsList {
+        header {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+    }
+}

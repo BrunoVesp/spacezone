@@ -1,0 +1,30 @@
+@use './styles/variables' as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $font;
+}
+
+body {
+  background-color: $secundaryColor;
+  padding-bottom: 66px;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+@media (min-width: $desktopBreakpoint) {
+  body {
+    padding-top: 102px;
+    padding-bottom: 0px;
+  }
+}
