@@ -10,9 +10,8 @@ export const updateUserSchema = z
         email: z.string().email("Email inválido").optional(),
         newPassword: z
             .string()
-            .min(6, "A senha deve ter no mínimo 6 caracteres")
-            .max(100, "A senha deve ter no máximo 100 caracteres")
             .optional(),
+            
         confirmPassword: z.string().optional(),
     })
     .refine(

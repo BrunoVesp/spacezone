@@ -15,9 +15,7 @@ import { allowedTags } from "../../data/tags";
 import "./dashboard.scss";
 import FileInput from "../../components/FileInput";
 import type { AxiosError } from "axios";
-
-// Se você tiver um contexto de auth, substitua isso
-const mockLoggedUserId = 1;
+import { useAuthUser } from "../../hooks/useAuthUser";
 
 const Dashboard = () => {
     const {
@@ -37,6 +35,8 @@ const Dashboard = () => {
         },
         resolver: zodResolver(newPostSchema),
     });
+
+    const user = useAuthUser();
 
     const { addToast } = useToast();
 
@@ -108,8 +108,12 @@ const Dashboard = () => {
         e.preventDefault();
 
         try {
-            await http.put(`/redatores/demote/${mockLoggedUserId}`);
+            await http.put(`/redatores/demote/${user?.id}`);
             addToast("Você foi despromovido com sucesso.", "success");
+
+            // logout local e redireciona para login
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
         } catch (error: unknown) {
             const err = error as AxiosError<{ message?: string }>;
             addToast(err.response?.data?.message ?? "Erro ao despromover", "error");
