@@ -9,5 +9,6 @@
     "strict": true, // Habilita todas as checagens de tipo estritas
     "skipLibCheck": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": ["src"]
 }
