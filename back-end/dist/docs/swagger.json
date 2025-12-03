@@ -1,0 +1,20 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SpaceZone API",
+        "version": "1.0.0",
+        "description": "Documentação da API SpaceZone"
+    },
+    "paths": {
+        "/users": {
+            "get": {
+                "summary": "Lista todos os usuários",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuários"
+                    }
+                }
+            }
+        }
+    }
+}
