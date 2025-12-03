@@ -1,5 +1,5 @@
+import { Comentary } from "@prisma/client";
 import prisma from "../db/prisma";
-import { Comentary } from "../generated/prisma";
 import { commentType } from "../types/commentType";
 
 const ComentaryService = {

@@ -1,9 +1,7 @@
-import { Comentary } from './../generated/prisma/index.d';
 import prisma from "../db/prisma";
-import { Post } from "../generated/prisma";
 import { PostDataCreateType } from "../types/postDataCreate";
-import { Prisma } from "@prisma/client";
 import { allowedTags } from '../schemas/postSchema';
+import { Post } from "@prisma/client";
 
 const PostsService = {
     async getAllPosts(skip: number, limit: number): Promise<any[]> {

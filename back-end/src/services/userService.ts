@@ -1,5 +1,5 @@
+import { User } from "@prisma/client";
 import prisma from "../db/prisma";
-import { User } from "../generated/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 

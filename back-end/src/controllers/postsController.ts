@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { Post } from "../generated/prisma"
 import PostsService from "../services/postsService";
 import { postCreateSchema, postUpdateSchema } from "../schemas/postSchema";
 import { number, ZodError } from "zod";
@@ -9,6 +8,7 @@ import prisma from "../db/prisma";
 import { deleteFile } from "../middleware/deletefile";
 import { parse } from "path";
 import { getPagination, buildPaginationLinks, normalizeTags } from "../middleware/pagination";
+import { Post } from "@prisma/client";
 
 const PostsController = {
     async getAllPosts(req: Request, res: Response): Promise<void> {

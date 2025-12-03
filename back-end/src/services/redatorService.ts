@@ -1,5 +1,5 @@
+import { User } from "@prisma/client";
 import prisma from "../db/prisma";
-import { Post, User } from "../generated/prisma";
 
 const RedatorService = {
   async createRedator(id: number): Promise<User> {

@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import UserService from '../services/userService';
-import { User } from '../generated/prisma';
 import bcrypt from 'bcrypt';
 import { UserDataUpdateType } from '../types/userDataCreate';
 import { createUserSchema, loginUserSchema, updateUserSchema } from '../schemas/userSchema';
@@ -8,6 +7,7 @@ import { idSchema } from '../schemas/idSchema';
 import { deleteFile } from '../middleware/deletefile';
 import { ZodError } from 'zod';
 import { getPagination, buildPaginationLinks } from "../middleware/pagination";
+import { User } from '@prisma/client';
 
 const UserController = {
     async getAllUsers(req: Request, res: Response): Promise<void> {
