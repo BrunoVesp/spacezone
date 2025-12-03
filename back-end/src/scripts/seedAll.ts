@@ -6,25 +6,29 @@ async function main() {
     console.log("🌱 Iniciando seed...");
 
     // ------------------------------------------------------
-    // 1) Criar usuário admin
+    // 1) Criar ou pegar usuário admin (sem duplicar)
     // ------------------------------------------------------
-    const admin = await prisma.user.create({
-        data: {
+    const admin = await prisma.user.upsert({
+        where: { email: "admin@example.com" },
+        update: {}, // não atualiza nada se já existir
+        create: {
             nickname: "admin",
             email: "admin@example.com",
-            password: "123456", // coloque hash depois se quiser
+            password: "123456", // ideal usar hash depois
             isRedator: true,
             profileImage: null,
         },
     });
 
-    console.log("👤 Usuário admin criado:", admin.email);
+    console.log("👤 Usuário admin OK:", admin.email);
 
     // ------------------------------------------------------
-    // 2) Criar posts do admin
+    // 2) Criar posts do admin (usar upsert também)
     // ------------------------------------------------------
-    const post1 = await prisma.post.create({
-        data: {
+    const post1 = await prisma.post.upsert({
+        where: { id: 1 }, // ID fixo para evitar duplicação
+        update: {},
+        create: {
             title: "Bem-vindo ao SpaceZone",
             subtitle: "Primeiro post de demonstração",
             body: "Este é um exemplo de conteúdo para o primeiro post...",
@@ -34,8 +38,10 @@ async function main() {
         },
     });
 
-    const post2 = await prisma.post.create({
-        data: {
+    const post2 = await prisma.post.upsert({
+        where: { id: 2 },
+        update: {},
+        create: {
             title: "Atualizações do Projeto",
             subtitle: "O que vem por aí",
             body: "Este post fala sobre futuras atualizações e melhorias...",
@@ -45,10 +51,10 @@ async function main() {
         },
     });
 
-    console.log("📝 Posts criados:", post1.id, post2.id);
+    console.log("📝 Posts OK:", post1.id, post2.id);
 
     // ------------------------------------------------------
-    // 3) Criar comentários nos posts
+    // 3) Criar comentários apenas se não existirem
     // ------------------------------------------------------
     await prisma.comentary.createMany({
         data: [
@@ -71,9 +77,10 @@ async function main() {
                 postId: post1.id,
             },
         ],
+        skipDuplicates: true, // 👈 evita duplicações
     });
 
-    console.log("💬 Comentários criados!");
+    console.log("💬 Comentários OK!");
 }
 
 main()
