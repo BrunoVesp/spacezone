@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
@@ -6,7 +7,12 @@ async function main() {
     console.log("🌱 Iniciando seed...");
 
     // ------------------------------------------------------
-    // 1) Criar ou pegar usuário admin (sem duplicar)
+    // 1) Criar hash da senha
+    // ------------------------------------------------------
+    const hashedPassword = await bcrypt.hash("123456", 10);
+
+    // ------------------------------------------------------
+    // 2) Criar ou pegar usuário admin (sem duplicar)
     // ------------------------------------------------------
     const admin = await prisma.user.upsert({
         where: { email: "admin@example.com" },
@@ -14,7 +20,7 @@ async function main() {
         create: {
             nickname: "admin",
             email: "admin@example.com",
-            password: "123456", // ideal usar hash depois
+            password: hashedPassword,
             isRedator: true,
             profileImage: null,
         },
@@ -23,10 +29,10 @@ async function main() {
     console.log("👤 Usuário admin OK:", admin.email);
 
     // ------------------------------------------------------
-    // 2) Criar posts do admin (usar upsert também)
+    // 3) Criar posts do admin (usar upsert também)
     // ------------------------------------------------------
     const post1 = await prisma.post.upsert({
-        where: { id: 1 }, // ID fixo para evitar duplicação
+        where: { id: 1 },
         update: {},
         create: {
             title: "Bem-vindo ao SpaceZone",
@@ -34,7 +40,6 @@ async function main() {
             body: "Este é um exemplo de conteúdo para o primeiro post...",
             authorId: admin.id,
             image: null,
-            tags: ["introdução", "spacezone"],
         },
     });
 
@@ -47,14 +52,13 @@ async function main() {
             body: "Este post fala sobre futuras atualizações e melhorias...",
             authorId: admin.id,
             image: null,
-            tags: ["atualizações"],
         },
     });
 
     console.log("📝 Posts OK:", post1.id, post2.id);
 
     // ------------------------------------------------------
-    // 3) Criar comentários apenas se não existirem
+    // 4) Criar comentários apenas se não existirem
     // ------------------------------------------------------
     await prisma.comentary.createMany({
         data: [
@@ -77,7 +81,7 @@ async function main() {
                 postId: post1.id,
             },
         ],
-        skipDuplicates: true, // 👈 evita duplicações
+        skipDuplicates: true,
     });
 
     console.log("💬 Comentários OK!");
